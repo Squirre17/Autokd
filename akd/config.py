@@ -21,19 +21,20 @@ class Config:
     def parse(self) -> None:
         try:
             with open(self.SYS_CONF) as sysf:
-                conf = json.load(sysf);
+                conf = json.load(sysf)
                 self.__docker_url      : str = conf["docker-url"]  # e.g : squirre17/dirtypipe:1.0
-                self.__linux_url       : str = conf["liunx-url"]    
+                self.__linux_url       : str = conf["linux-url"]    
                 self.__image_name      : str = self.__docker_url.split("/")[1] # e.g. squirre17/dirtypipe:1.0 => dirtypipe:1.0 
                 self.__kernel_src_path : str = Path.cwd() / "kernel-src"
-                logger.dbg(self.__docker_url);
+                logger.debug(self.__docker_url);
 
         except FileNotFoundError:
             printer.fatal("{} not found".format(os.path.abspath(self.SYS_CONF)))
         
         try:# TODO:
             with open(self.USER_CONF) as userf:
-
+                conf = json.load(userf)
+                self.__kversion       : str = conf["kernel-version"] # e.g. v5.10-rc1
                 pass
         except Exception:
             raise Exception
@@ -55,6 +56,14 @@ class Config:
     @property
     def kernel_src_path(self) -> str:
         return self.__kernel_src_path
+    
+    @property
+    def kernel_version(self) -> str:
+        return self.__kversion
+    
+    @property
+    def linux_url(self) -> str:
+        return self.__linux_url
 
 config = Config()
 config.parse()

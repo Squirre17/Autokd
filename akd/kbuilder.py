@@ -1,25 +1,69 @@
+import urllib
+import urllib.error
+import urllib.request
+import requests
 import akd.utils.printer as printer
 
-from typing     import (Type)
-from pathlib    import (Path)
-from typing     import (List)
-from akd.config import (config)
+from typing           import (Type)
+from pathlib          import (Path)
+from typing           import (List)
+from akd.utils.dynbar import (Dynbar)
+from akd.config       import (config)
 
 class Kbuilder:
     '''
     kernel builder : be responsible for kernel donwload, unpack, cmopile and clean so on
     '''
+
+    DOWNLOAD_PATH : Path = Path.absolute(Path.cwd() / "download")
     
     def __init__(self) -> None:
-        self.kernel_src_path : Path = config.kernel_src_path
-        ...
-    
+        self.kernel_src_path : Path = config.kernel_src_path # full path
+        self.target_name     : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
+        self.target_file     : Path = self.DOWNLOAD_PATH / self.target_name
+        self.download_url    : str  = "{url}/{target}".format(
+            url = config.linux_url,
+            target = self.target_name
+        )
+
     def download(self) -> Type['Kbuilder']:
-        raise NotImplementedError
+        '''
+        e.g. : wget https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.0.tar.gz
+                url is https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6 TODO:
+        '''
+        if not self.DOWNLOAD_PATH.exists():
+            printer.note(f"make dir on {self.DOWNLOAD_PATH}")
+            self.DOWNLOAD_PATH.mkdir()
+        
+        if self.target_file.exists():
+            printer.note(f"{self.target_file} exists, skip download...")
+            return self
+        
+        printer.info(f"Downloading {self.download_url} ... This may take a while!")
+        # TODO:
+        # with Dynbar(unit = "B", unit_scale = True, miniters = 1, desc = self.target_file.name) as t:
+        #     try:
+        #         urllib.request.urlretrieve(
+        #             self.download_url, filename=self.target_file, reporthook = t.update_to
+        #         )
+        #         t.total = t.n
+        #     except urllib.error.HTTPError:
+        #         printer.fatal(f"{target_file} didn't exist")
+        def redownload(url, filename):
+            try:
+                urllib.request.urlretrieve(self.download_url, filename=self.target_file.absolute())
+            except urllib.error.ContentTooShortError:
+                redownload(url, filename)
+
+        try:
+            redownload(self.download_url, filename=self.target_file.absolute())
+        except urllib.error.HTTPError:
+            printer.fatal(f"{self.download_url} didn't exist")
         return self
     
     def unpack(self) -> Type['Kbuilder']:
-        raise NotImplementedError
+        # raise NotImplementedError
+        printer.dbg("todo unpack")
         return self
 
     def compile(self) -> Type['Kbuilder']:

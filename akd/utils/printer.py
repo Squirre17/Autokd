@@ -29,7 +29,7 @@ def fatal(msg):
     '''
     fatal err by program
     '''
-    prompt = Color.highlightify(Color.colorify("[!]" ,"red"))
+    prompt = Color.boldify(Color.colorify("[!]" ,"red"))
     body   = " FATAL  : "
     print(prompt + body, end = "")
     print(msg)
