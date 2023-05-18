@@ -1,6 +1,7 @@
 import os
 import docker
 import docker.errors
+import subprocess as sp
 import akd.utils.printer as printer
 
 from docker.models.images import (Image)
@@ -27,6 +28,8 @@ class Docker:
         for checkee in self.PROXY_CHECK_LIST:
             if checkee in os.environ:
                 printer.info("{} have set with {}".format(checkee, os.environ[checkee]))
+            else:
+                printer.warn("{} not set".format(checkee))
 
     def find_image(self, tag = None) -> Optional[Image]:
         '''
@@ -44,9 +47,13 @@ class Docker:
 
         if self.find_image(): # local image exist
             return
+        
+        printer.info("not found local image, start to pull")
 
         url = config.docker_url
         cmd = f"docker pull {url}" # note here not need privilege
-        os.system(cmd)
+        sp.run(cmd.split()) # subprocess.run will block current thread
+
+        
     
 
