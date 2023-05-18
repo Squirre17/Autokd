@@ -71,7 +71,7 @@ class Kbuilder:
                 for option in DEBUG_OPTIONS:
                     if line.startswith(option):
                         key, val = line.strip().split("=", 1)
-                        assert key == option
+                        assert key == option, f"{key} != {option}"
                         printer.err(f"option `{val}` set to `{key}`") if val != 'y' else ...
 
         printer.info("all .config options sanity check pass")
