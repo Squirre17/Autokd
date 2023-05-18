@@ -1,3 +1,4 @@
 linux-*
 kernel-root
 download
+**/__pycache__
