@@ -26,5 +26,9 @@ class Checker:
                 printer.info("{} have set with {}".format(checkee, os.environ[checkee]))
             else:
                 printer.warn("{} not set".format(checkee))
-
+    def root(self) -> None:
+        '''
+        check whether in correct root directory to run this script
+        '''
+        raise NotImplementedError
 checker = Checker()

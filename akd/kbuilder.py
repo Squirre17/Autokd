@@ -2,8 +2,11 @@ import urllib
 import urllib.error
 import urllib.request
 import requests
+import tarfile
+import shutil
 import akd.utils.printer as printer
 
+from tqdm             import (tqdm)
 from typing           import (Type)
 from pathlib          import (Path)
 from typing           import (List)
@@ -20,11 +23,14 @@ class Kbuilder:
     def __init__(self) -> None:
         self.kernel_src_path : Path = config.kernel_src_path # full path
         self.target_name     : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
-        self.target_file     : Path = self.DOWNLOAD_PATH / self.target_name
+        self.target_path     : Path = self.DOWNLOAD_PATH / self.target_name
         self.download_url    : str  = "{url}/{target}".format(
             url = config.linux_url,
             target = self.target_name
         )
+        self.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
+        self.unpacked_dir_name  : str  = self.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
+        self.kernel_root_dir    : Path = self.kernel_preroot_dir / self.unpacked_dir_name
 
     def download(self) -> Type['Kbuilder']:
         '''
@@ -35,8 +41,8 @@ class Kbuilder:
             printer.note(f"make dir on {self.DOWNLOAD_PATH}")
             self.DOWNLOAD_PATH.mkdir()
         
-        if self.target_file.exists():
-            printer.note(f"{self.target_file} exists, skip download...")
+        if self.target_path.exists():
+            printer.note(f"{self.target_path} exists, skip download...")
             return self
         
         printer.info(f"Downloading {self.download_url} ... This may take a while!")
@@ -51,22 +57,53 @@ class Kbuilder:
         #         printer.fatal(f"{target_file} didn't exist")
         def redownload(url, filename):
             try:
-                urllib.request.urlretrieve(self.download_url, filename=self.target_file.absolute())
+                urllib.request.urlretrieve(self.download_url, filename=self.target_path.absolute())
             except urllib.error.ContentTooShortError:
                 redownload(url, filename)
 
         try:
-            redownload(self.download_url, filename=self.target_file.absolute())
+            redownload(self.download_url, filename=self.target_path.absolute())
         except urllib.error.HTTPError:
             printer.fatal(f"{self.download_url} didn't exist")
         return self
     
     def unpack(self) -> Type['Kbuilder']:
-        # raise NotImplementedError
+        '''
+        unpack a tgz
+        '''
+
+        # sanity check for skip unpack
+        if self.kernel_preroot_dir.exists() and len([_ for _ in self.kernel_preroot_dir.iterdir()]) != 0:
+            printer.note("root dir exist, do not unpack again")
+            return self
+        else:
+            try:
+                self.kernel_preroot_dir.mkdir()
+            except FileExistsError:
+                pass
+
+        printer.info("Unpacking kernel src tgz...")
+        try:
+            with tarfile.open(self.target_path, mode="r") as t:
+                members = t.getmembers()
+                for member in tqdm(iterable=members, total=len(members)):
+                    t.extract(member, self.kernel_preroot_dir)
+
+            return self
+        except tarfile.TarError:
+            printer.fatal("Failed to extract tar kernel archive!")
+
         printer.dbg("todo unpack")
         return self
 
     def compile(self) -> Type['Kbuilder']:
+
+        for iter in self.kernel_root_dir.iterdir():
+            if iter.name == "vmlinux":
+                printer.note("vmlinux detected, use the old")
+                return self
+        
+        
         raise NotImplementedError
         return self
     
@@ -129,6 +166,10 @@ kbuilder = Kbuilder()
 
 
 
+
+class Kunpacker:
+    def __init__(self) -> None:
+        pass
 
 
 
