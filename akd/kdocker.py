@@ -7,7 +7,7 @@ import akd.utils.printer as printer
 from docker.models.images import (Image)
 from akd.config           import (config)
 from docker               import (DockerClient)
-from typing               import (List, Optional)
+from typing               import (List, Optional, Type)
 
 class Docker:
     '''
@@ -24,14 +24,14 @@ class Docker:
         self.img_name : str          = config.image_name # image name with tag
         ...
 
-    def proxy_check(self) -> None:
+    def __proxy_check(self) -> None:
         for checkee in self.PROXY_CHECK_LIST:
             if checkee in os.environ:
                 printer.info("{} have set with {}".format(checkee, os.environ[checkee]))
             else:
                 printer.warn("{} not set".format(checkee))
 
-    def find_image(self, tag = None) -> Optional[Image]:
+    def __find_image(self, tag = None) -> Optional[Image]:
         '''
         find a image locally
         '''
@@ -43,9 +43,9 @@ class Docker:
         except docker.errors.ImageNotFound:
             return None
         
-    def pull(self) -> None:
+    def pull(self) -> Type["Docker"]:
 
-        if self.find_image(): # local image exist
+        if self.__find_image(): # local image exist
             printer.info("found local image, use it")
             return
         
@@ -54,7 +54,13 @@ class Docker:
         url = config.docker_url
         cmd = f"docker pull {url}" # note here not need privilege
         sp.run(cmd.split()) # subprocess.run will block current thread
+        return self
+    
+    def setup_ssh(self) -> Type["Docker"]:
+        raise NotImplementedError
+        return self
 
 
+kdocker = Docker()
     
 

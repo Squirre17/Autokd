@@ -1,5 +1,6 @@
 import akd.utils.printer as printer
 
+from typing     import (Type)
 from pathlib    import (Path)
 from typing     import (List)
 from akd.config import (config)
@@ -13,19 +14,23 @@ class Kbuilder:
         self.kernel_src_path : Path = config.kernel_src_path
         ...
     
-    def download(self) -> None:
+    def download(self) -> Type['Kbuilder']:
         raise NotImplementedError
+        return self
     
-    def unpack(self) -> None:
+    def unpack(self) -> Type['Kbuilder']:
         raise NotImplementedError
+        return self
 
-    def compile(self) -> None:
+    def compile(self) -> Type['Kbuilder']:
         raise NotImplementedError
+        return self
     
-    def make_mrproper(self) -> None:
+    def make_mrproper(self) -> Type['Kbuilder']:
         raise NotImplementedError
+        return self
     
-    def check_debug_config(self) -> None:
+    def check_debug_config(self) -> Type['Kbuilder']:
         '''
         make sure some debug config is 'y' in `.config`
         '''
@@ -76,7 +81,7 @@ class Kbuilder:
 
         printer.info("all .config options sanity check pass")
 
-
+kbuilder = Kbuilder()
 
 
 
