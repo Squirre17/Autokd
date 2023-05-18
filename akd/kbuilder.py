@@ -1,3 +1,4 @@
+import os
 import urllib
 import urllib.error
 import urllib.request
@@ -5,6 +6,7 @@ import requests
 import tarfile
 import shutil
 import akd.utils.printer as printer
+import subprocess as sp
 
 from tqdm             import (tqdm)
 from typing           import (Type)
@@ -31,6 +33,9 @@ class Kbuilder:
         self.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
         self.unpacked_dir_name  : str  = self.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
         self.kernel_root_dir    : Path = self.kernel_preroot_dir / self.unpacked_dir_name
+
+        # temp
+        self.nproc = 2
 
     def download(self) -> Type['Kbuilder']:
         '''
@@ -103,8 +108,12 @@ class Kbuilder:
                 printer.note("vmlinux detected, use the old")
                 return self
         
-        
-        raise NotImplementedError
+        cur_dir = Path.cwd()
+        os.chdir(self.kernel_root_dir)
+        sp.run("make x86_64_defconfig", shell=True)
+        sp.run("make menuconfig", shell=tuple)
+        os.chdir(cur_dir)
+
         return self
     
     def make_mrproper(self) -> Type['Kbuilder']:
