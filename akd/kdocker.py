@@ -46,6 +46,7 @@ class Docker:
     def pull(self) -> None:
 
         if self.find_image(): # local image exist
+            printer.info("found local image, use it")
             return
         
         printer.info("not found local image, start to pull")
@@ -54,6 +55,6 @@ class Docker:
         cmd = f"docker pull {url}" # note here not need privilege
         sp.run(cmd.split()) # subprocess.run will block current thread
 
-        
+
     
 
