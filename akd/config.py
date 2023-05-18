@@ -2,6 +2,8 @@ import os
 import json
 import akd.utils.printer as printer
 
+from loguru import logger
+
 class Config:
     '''
     parse user/sys config file (current use .json).
@@ -19,8 +21,11 @@ class Config:
         try:
             with open(self.SYS_CONF) as sysf:
                 conf = json.load(sysf);
-                self.__docker_url : str = conf["docker-url"]
+                self.__docker_url : str = conf["docker-url"]  # e.g : squirre17/dirtypipe:1.0
                 self.__linux_url  : str = conf["liunx-url"]    
+                self.__image_name : str = self.__docker_url.split("/")[1] # e.g. squirre17/dirtypipe:1.0 => dirtypipe:1.0 
+                logger.dbg(self.__docker_url);
+
         except FileNotFoundError:
             printer.fatal("{} not found".format(os.path.abspath(self.SYS_CONF)))
         
@@ -33,7 +38,17 @@ class Config:
     
     @property
     def docker_url(self) -> str:
+        '''
+        e.g. : squirre17/dirtypipe:1.0
+        '''
         return self.__docker_url
+
+    @property
+    def image_name(self) -> str:
+        '''
+        e.g. : "my-image:latest"
+        '''
+        return self.__image_name
     
 
 config = Config()
