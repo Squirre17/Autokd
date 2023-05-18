@@ -1,3 +1,4 @@
+import sys
 import traceback
 
 from akd.utils.color import Color
@@ -23,6 +24,17 @@ def err(msg):
     body   = " ERR  : "
     print(prompt + body, end = "")
     print(msg)
+
+def fatal(msg):
+    '''
+    fatal err by program
+    '''
+    prompt = Color.highlightify(Color.colorify("[!]" ,"red"))
+    body   = " FATAL  : "
+    print(prompt + body, end = "")
+    print(msg)
+    sys.exit(1)
+
 
 def warn(msg):
     prompt = Color.colorify("[-]" ,"yellow")
