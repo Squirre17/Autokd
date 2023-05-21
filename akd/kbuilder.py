@@ -25,15 +25,15 @@ class Kbuilder:
     
     def __init__(self) -> None:
         # self.kernel_src_path : Path = config.kernel_src_path # full path
-        self.target_name     : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
-        self.target_path     : Path = self.DOWNLOAD_PATH / self.target_name
-        self.download_url    : str  = "{url}/{target}".format(
+        config.target_name        : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
+        config.target_path        : Path = self.DOWNLOAD_PATH / config.target_name
+        config.download_url       : str  = "{url}/{target}".format(
             url = config.linux_url,
-            target = self.target_name
+            target = config.target_name
         )
-        self.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
-        self.unpacked_dir_name  : str  = self.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
-        self.kernel_root_dir    : Path = self.kernel_preroot_dir / self.unpacked_dir_name
+        config.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
+        config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
+        config.kernel_root_dir    : Path = config.kernel_preroot_dir / config.unpacked_dir_name
 
         # temp
         self.nproc = 2
@@ -47,11 +47,11 @@ class Kbuilder:
             printer.note(f"make dir on {self.DOWNLOAD_PATH}")
             self.DOWNLOAD_PATH.mkdir()
         
-        if self.target_path.exists():
-            printer.note(f"{self.target_path} exists, skip download...")
+        if config.target_path.exists():
+            printer.note(f"{config.target_path} exists, skip download...")
             return self
         
-        printer.info(f"Downloading {self.download_url} ... This may take a while!")
+        printer.info(f"Downloading {config.download_url} ... This may take a while!")
         # TODO:
         # with Dynbar(unit = "B", unit_scale = True, miniters = 1, desc = self.target_file.name) as t:
         #     try:
@@ -63,14 +63,14 @@ class Kbuilder:
         #         printer.fatal(f"{target_file} didn't exist")
         def redownload(url, filename):
             try:
-                urllib.request.urlretrieve(self.download_url, filename=self.target_path.absolute())
+                urllib.request.urlretrieve(config.download_url, filename=config.target_path.absolute())
             except urllib.error.ContentTooShortError:
                 redownload(url, filename)
 
         try:
-            redownload(self.download_url, filename=self.target_path.absolute())
+            redownload(config.download_url, filename=config.target_path.absolute())
         except urllib.error.HTTPError:
-            printer.fatal(f"{self.download_url} didn't exist")
+            printer.fatal(f"{config.download_url} didn't exist")
         return self
     
     def unpack(self) -> Type['Kbuilder']:
@@ -79,12 +79,12 @@ class Kbuilder:
         '''
 
         # sanity check for skip unpack
-        if self.kernel_preroot_dir.exists() and len([_ for _ in self.kernel_preroot_dir.iterdir()]) != 0:
+        if config.kernel_preroot_dir.exists() and len([_ for _ in config.kernel_preroot_dir.iterdir()]) != 0:
             printer.note("root dir exist, do not unpack again")
             return self
         else:
             try:
-                self.kernel_preroot_dir.mkdir()
+                config.kernel_preroot_dir.mkdir()
             except FileExistsError:
                 pass
 
@@ -92,12 +92,12 @@ class Kbuilder:
         try:
             # add a check for download integrity
             try:
-                with tarfile.open(self.target_path, mode="r") as t:
+                with tarfile.open(config.target_path, mode="r") as t:
                     members = t.getmembers()
                     for member in tqdm(iterable=members, total=len(members)):
-                        t.extract(member, self.kernel_preroot_dir)
+                        t.extract(member, config.kernel_preroot_dir)
             except EOFError:
-                printer.fatal(f"{self.target_name} incomplete, abort (remove it and try again)")
+                printer.fatal(f"{config.target_name} incomplete, abort (remove it and try again)")
 
             return self
         except tarfile.TarError:
@@ -108,18 +108,18 @@ class Kbuilder:
 
     def compile(self) -> Type['Kbuilder']:
 
-        for iter in self.kernel_root_dir.iterdir():
+        for iter in config.kernel_root_dir.iterdir():
             if iter.name == "vmlinux":
                 printer.note("vmlinux detected, use the old")
                 return self
 
         cur_dir = Path.cwd()
         
-        kconf = self.kernel_root_dir / ".config"
+        kconf = config.kernel_root_dir / ".config"
         if kconf.exists():
             printer.note("kernel .config file found, skip config generate stage")
         else:
-            os.chdir(self.kernel_root_dir)
+            os.chdir(config.kernel_root_dir)
             sp.run("make x86_64_defconfig", shell=True)
             sp.run("make menuconfig", shell=True)
             os.chdir(cur_dir)
@@ -128,12 +128,14 @@ class Kbuilder:
 
         cmd = f"make bzImage -j{self.nproc}"
         printer.note(f"start to compile kernel with nproc({self.nproc})")
-        os.chdir(self.kernel_root_dir)
-        logger.debug(self.kernel_root_dir)
+        os.chdir(config.kernel_root_dir)
+        logger.debug(config.kernel_root_dir)
         sp.run(cmd, shell=True)
         os.chdir(cur_dir)
 
         printer.info("kernel build success!")
+        config.bzimage_path = config.kernel_root_dir / "arch/x86_64/boot/bzImage"
+        assert config.bzimage_path.exists()
         return self
     
     def make_mrproper(self) -> Type['Kbuilder']:
@@ -160,7 +162,7 @@ class Kbuilder:
             "CONFIG_DEBUG_INFO_DWARF4",
         ]
 
-        dot_config : Path = self.kernel_root_dir / ".config" 
+        dot_config : Path = config.kernel_root_dir / ".config" 
         if not dot_config.exists() or not dot_config.is_file():
             printer.fatal(f"{dot_config} can't found")
         
