@@ -212,3 +212,20 @@ class Kdownloader:
 
     def __init__(self) -> None:
         raise NotImplementedError
+    
+    def resources(self) -> Type["Kdownloader"]:
+        '''
+        download resources
+        '''
+        cmd = "git https://github.com/Squirre17/autokd-resources.git resource"
+
+        config.resouce_path = Path.cwd() / "resource"
+        if config.resouce_path.exists() and len([_ for _ in config.resouce_path.iterdir()]) != 0:
+            printer.note("resource dir exist, do not download again")
+            return self
+
+        printer.note("download resource, this will take a while")
+        sp.run(cmd, shell=True)
+
+        
+

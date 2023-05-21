@@ -36,6 +36,7 @@ class Config:
         self.unpacked_dir_name  : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir    : Path = None #
         self.bzimage_path       : Path = None
+        self.resouce_path       : Path = None
 
         pass
 
