@@ -26,6 +26,7 @@ class Config:
 
     def __init__(self) -> None:
 
+        # url path
         self.docker_url         : str  = None
         self.linux_url          : str  = None
         self.kernel_version     : str  = None
@@ -37,7 +38,13 @@ class Config:
         self.kernel_root_dir    : Path = None #
         self.bzimage_path       : Path = None
         self.resouce_path       : Path = None
+        self.initrd_path        : Path = None
+        self.initrd_path        : Path = None
 
+        # dir path
+        self.scripts_dir_path   : Path = Path.cwd() / "scripts"
+        # qemu
+        self.qemu_script_path   : Path = None
         pass
 
     def parse(self) -> None:
@@ -60,7 +67,11 @@ class Config:
                 pass
         except Exception:
             raise Exception
-    
+
+
+config = Config()
+config.parse()
+
     # @property
     # @return_no_none
     # def docker_url(self) -> str:
@@ -114,7 +125,4 @@ class Config:
 
     
 
-
-config = Config()
-config.parse()
 

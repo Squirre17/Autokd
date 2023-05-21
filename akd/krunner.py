@@ -19,9 +19,10 @@ from akd.config       import (config)
 class Krunner:
 
     def __init__(self) -> None:
-        pass
+        config.qemu_script_path = config.scripts_dir_path / "qemu-run.sh"
+        ...
 
-    def make_run_script(self) -> None:
+    def make_run_script(self) -> Type["Krunner"]:
         '''shell
         qemu-system-x86_64 \
             -m 256M \
@@ -39,6 +40,9 @@ class Krunner:
             -monitor /dev/null
         '''
 
+        assert config.bzimage_path.exists()
+        assert config.initrd_path.exists()
+
         # temp
         cmd = '''
         qemu-system-x86_64
@@ -52,8 +56,25 @@ class Krunner:
             -net nic,model=virtio
             -net user
             -monitor /dev/null
+            -s
         '''.format(
             bzimage_path = config.bzimage_path,
-            initrd_path  = TODO
+            initrd_path  = config.initrd_path
         )
+
+        if config.qemu_script_path.exists():
+            printer.warn("TEMP : not change if exist")
+            return self
+
+        with open(config.qemu_script_path,  "+w") as f:
+            f.writelines(cmd.splitlines())
+
         ...
+
+        return self
+    
+    def run(self) -> None:
+        assert config.qemu_script_path.exists()
+
+        "todo : maybe this part let user to do more batter"
+        

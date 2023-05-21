@@ -34,6 +34,8 @@ class Kbuilder:
         config.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
         config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
         config.kernel_root_dir    : Path = config.kernel_preroot_dir / config.unpacked_dir_name
+        config.resouce_path       : Path = Path.cwd() / "resource"
+        config.initrd_path        : Path = config.resouce_path / "initrd.cpio"
 
         # temp
         self.nproc = 2
@@ -205,27 +207,27 @@ class Kunpacker:
 
 
 
-class Kdownloader:
-    '''
-    TODO:
-    '''
+# class Kdownloader: # not need?
+#     '''
+#     TODO:
+#     '''
 
-    def __init__(self) -> None:
-        raise NotImplementedError
+#     def __init__(self) -> None:
+#         raise NotImplementedError
     
-    def resources(self) -> Type["Kdownloader"]:
-        '''
-        download resources
-        '''
-        cmd = "git https://github.com/Squirre17/autokd-resources.git resource"
+#     def resources(self) -> Type["Kdownloader"]:
+#         '''
+#         download resources
+#         '''
+#         cmd = "git https://github.com/Squirre17/autokd-resources.git resource"
 
-        config.resouce_path = Path.cwd() / "resource"
-        if config.resouce_path.exists() and len([_ for _ in config.resouce_path.iterdir()]) != 0:
-            printer.note("resource dir exist, do not download again")
-            return self
+#         config.resouce_path = Path.cwd() / "resource"
+#         if config.resouce_path.exists() and len([_ for _ in config.resouce_path.iterdir()]) != 0:
+#             printer.note("resource dir exist, do not download again")
+#             return self
 
-        printer.note("download resource, this will take a while")
-        sp.run(cmd, shell=True)
+#         printer.note("download resource, this will take a while")
+#         sp.run(cmd, shell=True)
 
-        
+
 
