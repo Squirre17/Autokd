@@ -118,6 +118,11 @@ class Kbuilder:
                 printer.note("vmlinux detected, use the old")
                 return self
         
+        kconf = self.kernel_root_dir / ".config"
+        if kconf.exists():
+            printer.note("kernel .config file exist alreadly, skip compile")
+            return self
+        
         cur_dir = Path.cwd()
         os.chdir(self.kernel_root_dir)
         sp.run("make x86_64_defconfig", shell=True)
