@@ -79,6 +79,13 @@ class Kbuilder:
 
         # sanity check for skip unpack
         if self.kernel_preroot_dir.exists() and len([_ for _ in self.kernel_preroot_dir.iterdir()]) != 0:
+            # add a check for download integrity
+            try:
+                with tarfile.open(self.target_path, "r:gz") as tar:
+                    tar.getmembers()
+            except tarfile.ReadError:
+                printer.fatal(f"{self.target_name} incomplete, abort(remove it and try again)")
+                
             printer.note("root dir exist, do not unpack again")
             return self
         else:
