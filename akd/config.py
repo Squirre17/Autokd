@@ -27,24 +27,26 @@ class Config:
     def __init__(self) -> None:
 
         # url path
-        self.docker_url         : str  = None
-        self.linux_url          : str  = None
-        self.kernel_version     : str  = None
-        self.target_name        : str  = None # merely name
-        self.target_path        : Path = None # full path
-        self.download_url       : str  = None
-        self.kernel_preroot_dir : Path = None # not real root
-        self.unpacked_dir_name  : str  = None # e.g. linux-2.6.0
-        self.kernel_root_dir    : Path = None #
-        self.bzimage_path       : Path = None
-        self.resouce_path       : Path = None
-        self.initrd_path        : Path = None
-        self.initrd_path        : Path = None
+        self.docker_url             : str  = None
+        self.linux_url              : str  = None
+        self.kernel_version         : str  = None
+        self.target_name            : str  = None # merely name
+        self.target_path            : Path = None # full path
+        self.download_url           : str  = None
+        self.kernel_preroot_dir     : Path = None # not real root
+        self.unpacked_dir_name      : str  = None # e.g. linux-2.6.0
+        self.kernel_root_dir        : Path = None #
+        self.bzimage_path           : Path = None
+        self.resouce_path           : Path = None
+        self.initrd_path            : Path = None
+        self.modified_initrd_path   : Path = None
+        self.initrd_is_root_used    : bool = False
 
         # dir path
-        self.scripts_dir_path   : Path = Path.cwd() / "scripts"
+        self.scripts_dir_path       : Path = Path.cwd() / "scripts"
+        self.unpacked_fs_dir_path   : Path = Path.cwd() / "fsroot"
         # qemu
-        self.qemu_script_path   : Path = None
+        self.qemu_script_path       : Path = None
         pass
 
     def parse(self) -> None:
@@ -64,6 +66,15 @@ class Config:
             with open(self.USER_CONF) as userf:
                 conf = json.load(userf)
                 self.kernel_version : str = conf["kernel-version"] # e.g. v5.10-rc1
+                
+                is_root_use : str = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
+                if is_root_use.lower() == "true":
+                    self.initrd_is_root_used = True
+                elif is_root_use.lower() == "false":
+                    self.initrd_is_root_used = False
+                else:
+                    raise KeyError # TODO
+
                 pass
         except Exception:
             raise Exception

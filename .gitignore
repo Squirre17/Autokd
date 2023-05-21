@@ -3,3 +3,5 @@ kernel-root
 download
 **/__pycache__
 awd/__pycache__
+fsroot
+resource/initrd.modified.cpio
