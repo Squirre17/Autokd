@@ -5,7 +5,7 @@ from akd.utils.color import Color
 
 def info(msg):
     prompt = Color.colorify("[+]" ,"green")
-    body   = " INFO : "
+    body   = " INFO  : "
     print(prompt + body, end = "")
     print(msg)
 
@@ -14,14 +14,14 @@ in_debug = True
 def dbg(msg):
     if in_debug:
         prompt = Color.colorify("[#]" ,"purple")
-        body   = " DBG  : "
+        body   = " DBG   : "
         print(prompt + body, end = "")
         print(msg)
     else : pass
 
 def err(msg):
     prompt = Color.colorify("[!]" ,"red")
-    body   = " ERR  : "
+    body   = " ERR   : "
     print(prompt + body, end = "")
     print(msg)
 
@@ -30,7 +30,7 @@ def fatal(msg):
     fatal err by program
     '''
     prompt = Color.boldify(Color.colorify("[!]" ,"red"))
-    body   = " FATAL  : "
+    body   = " FATAL : "
     print(prompt + body, end = "")
     print(msg)
     sys.exit(1)
@@ -38,13 +38,13 @@ def fatal(msg):
 
 def warn(msg):
     prompt = Color.colorify("[-]" ,"yellow")
-    body   = " WARN : "
+    body   = " WARN  : "
     print(prompt + body, end = "")
     print(msg)
 
 def note(msg):
     prompt = Color.colorify("[*]" ,"blue")
-    body   = " NOTE : "
+    body   = " NOTE  : "
     print(prompt + body, end = "")
     print(msg)
 

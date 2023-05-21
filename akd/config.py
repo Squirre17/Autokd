@@ -55,6 +55,7 @@ class Config:
     
     @property
     def kernel_src_path(self) -> str:
+        raise NotImplementedError
         return self.__kernel_src_path
     
     @property

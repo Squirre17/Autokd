@@ -12,6 +12,7 @@ from tqdm             import (tqdm)
 from typing           import (Type)
 from pathlib          import (Path)
 from typing           import (List)
+from loguru           import (logger)
 from akd.utils.dynbar import (Dynbar)
 from akd.config       import (config)
 
@@ -23,7 +24,7 @@ class Kbuilder:
     DOWNLOAD_PATH : Path = Path.absolute(Path.cwd() / "download")
     
     def __init__(self) -> None:
-        self.kernel_src_path : Path = config.kernel_src_path # full path
+        # self.kernel_src_path : Path = config.kernel_src_path # full path
         self.target_name     : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
         self.target_path     : Path = self.DOWNLOAD_PATH / self.target_name
         self.download_url    : str  = "{url}/{target}".format(
@@ -111,18 +112,28 @@ class Kbuilder:
             if iter.name == "vmlinux":
                 printer.note("vmlinux detected, use the old")
                 return self
+
+        cur_dir = Path.cwd()
         
         kconf = self.kernel_root_dir / ".config"
         if kconf.exists():
-            printer.note("kernel .config file exist alreadly, skip compile")
-            return self
-        
-        cur_dir = Path.cwd()
+            printer.note("kernel .config file found, skip config generate stage")
+        else:
+            os.chdir(self.kernel_root_dir)
+            sp.run("make x86_64_defconfig", shell=True)
+            sp.run("make menuconfig", shell=True)
+            os.chdir(cur_dir)
+
+        self.check_debug_config()# TODO: ugly now
+
+        cmd = f"make bzImage -j{self.nproc}"
+        printer.note(f"start to compile kernel with nproc({self.nproc})")
         os.chdir(self.kernel_root_dir)
-        sp.run("make x86_64_defconfig", shell=True)
-        sp.run("make menuconfig", shell=tuple)
+        logger.debug(self.kernel_root_dir)
+        sp.run(cmd, shell=True)
         os.chdir(cur_dir)
 
+        printer.info("kernel build success!")
         return self
     
     def make_mrproper(self) -> Type['Kbuilder']:
@@ -149,7 +160,7 @@ class Kbuilder:
             "CONFIG_DEBUG_INFO_DWARF4",
         ]
 
-        dot_config : Path = self.kernel_src_path / ".config" 
+        dot_config : Path = self.kernel_root_dir / ".config" 
         if not dot_config.exists() or not dot_config.is_file():
             printer.fatal(f"{dot_config} can't found")
         
