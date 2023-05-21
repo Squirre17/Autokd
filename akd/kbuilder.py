@@ -79,13 +79,12 @@ class Kbuilder:
 
         # sanity check for skip unpack
         if self.kernel_preroot_dir.exists() and len([_ for _ in self.kernel_preroot_dir.iterdir()]) != 0:
-            # add a check for download integrity
             try:
                 with tarfile.open(self.target_path, "r:gz") as tar:
                     tar.getmembers()
             except tarfile.ReadError:
                 printer.fatal(f"{self.target_name} incomplete, abort(remove it and try again)")
-                
+
             printer.note("root dir exist, do not unpack again")
             return self
         else:
@@ -96,10 +95,14 @@ class Kbuilder:
 
         printer.info("Unpacking kernel src tgz...")
         try:
-            with tarfile.open(self.target_path, mode="r") as t:
-                members = t.getmembers()
-                for member in tqdm(iterable=members, total=len(members)):
-                    t.extract(member, self.kernel_preroot_dir)
+            # add a check for download integrity
+            try:
+                with tarfile.open(self.target_path, mode="r") as t:
+                    members = t.getmembers()
+                    for member in tqdm(iterable=members, total=len(members)):
+                        t.extract(member, self.kernel_preroot_dir)
+            except tarfile.ReadError:
+                printer.fatal(f"{self.target_name} incomplete, abort(remove it and try again)")
 
             return self
         except tarfile.TarError:
