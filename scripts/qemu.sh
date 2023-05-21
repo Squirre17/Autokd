@@ -8,4 +8,5 @@ qemu-system-x86_64 \
 	-nographic \
 	-net nic,model=virtio \
 	-net user \
-	-monitor /dev/null
+	-monitor /dev/null \
+    -s
