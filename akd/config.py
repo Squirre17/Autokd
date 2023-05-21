@@ -37,12 +37,12 @@ class Config:
         self.unpacked_dir_name      : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir        : Path = None #
         self.bzimage_path           : Path = None
-        self.resouce_path           : Path = None
         self.initrd_path            : Path = None
         self.modified_initrd_path   : Path = None
         self.initrd_is_root_used    : bool = False
 
         # dir path
+        self.resource_dir_path      : Path = Path.cwd() / "resource"
         self.scripts_dir_path       : Path = Path.cwd() / "scripts"
         self.unpacked_fs_dir_path   : Path = Path.cwd() / "fsroot"
         # qemu

@@ -23,7 +23,11 @@ from akd.config       import (config)
 
 class Initrd:
     def __init__(self) -> None:
-        config.modified_initrd_path = config.resouce_path /  "initrd.modified.cpio";
+        if not config.resource_dir_path.exists():
+            config.resource_dir_path.mkdir()
+
+        config.modified_initrd_path = config.resource_dir_path /  "initrd.modified.cpio";
+        config.initrd_path          = config.resource_dir_path /  "initrd.cpio";
 
         if config.initrd_is_root_used:
             self.packcmd = "find . -print0 |" \
@@ -52,7 +56,7 @@ class Initrd:
         printer.info("packing initrd.cpio...")
         
         cur_dir = Path.cwd()
-        os.chdir(config.resouce_path)
+        os.chdir(config.resource_dir_path)
         logger.debug(self.packcmd)
         sp.run(self.packcmd, shell=True)
         sp.run("chmod +x {}".format(config.modified_initrd_path.absolute()), shell=True)

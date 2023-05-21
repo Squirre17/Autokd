@@ -34,8 +34,8 @@ class Kbuilder:
         config.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
         config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
         config.kernel_root_dir    : Path = config.kernel_preroot_dir / config.unpacked_dir_name
-        config.resouce_path       : Path = Path.cwd() / "resource"
-        config.initrd_path        : Path = config.resouce_path / "initrd.cpio"
+        config.resource_dir_path       : Path = Path.cwd() / "resource"
+        config.initrd_path        : Path = config.resource_dir_path / "initrd.cpio"
 
         # temp
         self.nproc = 2
@@ -118,6 +118,9 @@ class Kbuilder:
         cur_dir = Path.cwd()
         
         kconf = config.kernel_root_dir / ".config"
+        config.bzimage_path = config.kernel_root_dir / "arch/x86_64/boot/bzImage"
+        assert config.bzimage_path.exists()
+        
         if kconf.exists():
             printer.note("kernel .config file found, skip config generate stage")
         else:
@@ -136,8 +139,6 @@ class Kbuilder:
         os.chdir(cur_dir)
 
         printer.info("kernel build success!")
-        config.bzimage_path = config.kernel_root_dir / "arch/x86_64/boot/bzImage"
-        assert config.bzimage_path.exists()
         return self
     
     def make_mrproper(self) -> Type['Kbuilder']:
