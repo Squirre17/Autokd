@@ -110,17 +110,17 @@ class Kbuilder:
 
     def compile(self) -> Type['Kbuilder']:
 
+        kconf = config.kernel_root_dir / ".config"
+        config.bzimage_path = config.kernel_root_dir / "arch/x86_64/boot/bzImage"
+        assert config.bzimage_path.exists()
+        
         for iter in config.kernel_root_dir.iterdir():
             if iter.name == "vmlinux":
                 printer.note("vmlinux detected, use the old")
                 return self
 
         cur_dir = Path.cwd()
-        
-        kconf = config.kernel_root_dir / ".config"
-        config.bzimage_path = config.kernel_root_dir / "arch/x86_64/boot/bzImage"
-        assert config.bzimage_path.exists()
-        
+
         if kconf.exists():
             printer.note("kernel .config file found, skip config generate stage")
         else:

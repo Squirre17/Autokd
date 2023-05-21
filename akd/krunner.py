@@ -67,7 +67,7 @@ class Krunner:
             return self
 
         with open(config.qemu_script_path,  "+w") as f:
-            f.writelines(cmd.splitlines())
+            f.write("\\\n".join(cmd.splitlines()))
 
         os.chmod(config.qemu_script_path, 0o755)
 
@@ -78,6 +78,7 @@ class Krunner:
         assert config.qemu_script_path.exists()
         "todo : maybe this part let user to do more batter"
         
-        sp.run(["bash", config.qemu_script_path.absolute()], shell=True)
+        assert os.access(config.qemu_script_path, os.X_OK)
+        sp.run([config.qemu_script_path.absolute()], shell=True)
 
 krunner = Krunner()
