@@ -101,8 +101,8 @@ class Kbuilder:
                     members = t.getmembers()
                     for member in tqdm(iterable=members, total=len(members)):
                         t.extract(member, self.kernel_preroot_dir)
-            except tarfile.ReadError:
-                printer.fatal(f"{self.target_name} incomplete, abort(remove it and try again)")
+            except EOFError:
+                printer.fatal(f"{self.target_name} incomplete, abort (remove it and try again)")
 
             return self
         except tarfile.TarError:
