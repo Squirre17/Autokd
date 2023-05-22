@@ -21,6 +21,8 @@ class Krunner:
 
     def __init__(self) -> None:
         config.qemu_script_path = config.scripts_dir_path / "qemu-run.sh"
+        config.exp_src_path     = Path.cwd() / "exp.c"
+        assert config.exp_src_path.exists()
         ...
 
     def make_run_script(self) -> Type["Krunner"]:
@@ -73,7 +75,11 @@ class Krunner:
         os.chmod(config.qemu_script_path, 0o755)
 
         return self
-    
+
+    def compile_exp(self) -> Type["Krunner"]:
+
+
+        
     def run(self) -> None:
 
         assert config.qemu_script_path.exists()

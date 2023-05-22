@@ -27,8 +27,12 @@ class Config:
 
     def __init__(self) -> None:
 
-        # sanity check for cwd
-        cwd = Path.cwd() # TODO:
+        # sanity and simple check for cwd
+        cwd = Path.cwd()
+        ck = cwd / "autokd"
+        if not ck.is_dir():
+            printer.fatal(f"{ck.name} not found, maybe in incorrect directory")
+
 
         # url path
         self.docker_url              : str  = None
@@ -44,33 +48,35 @@ class Config:
         self.modified_initrd_path    : Path = None
         self.initrd_is_root_used     : bool = False
 
-        # dir path
+        # dir path TODO: reconstruct here
         def create_if_not_exist(p : Path) -> None:
             if not p.exists():
                 p.mkdir()
             
-        self.resource_dir_path       : Path = Path.cwd() / "resource"
-        self.scripts_dir_path        : Path = Path.cwd() / "scripts"
-        self.unpacked_fs_dir_path    : Path = Path.cwd() / "fs-root"
-        self.kernel_preroot_dir_path : Path = Path.cwd() / "kernel-root" # not real root
-        self.download_dir_path       : Path = Path.cwd() / "download"
+        self.resource_dir_path       : Path = cwd / "resource"
+        self.scripts_dir_path        : Path = cwd / "scripts"
+        self.unpacked_fs_dir_path    : Path = cwd / "fs-root"
+        self.kernel_preroot_dir_path : Path = cwd / "kernel-root" # not real root
+        self.download_dir_path       : Path = cwd / "download"
 
         create_if_not_exist(self.resource_dir_path)
         create_if_not_exist(self.scripts_dir_path)
         create_if_not_exist(self.unpacked_fs_dir_path)
         create_if_not_exist(self.kernel_preroot_dir_path)
         create_if_not_exist(self.download_dir_path) 
-        
+
         # qemu
         self.qemu_script_path        : Path = None
-        printer.dbg(self.kernel_preroot_dir_path.absolute())
+        
+        # exp
+        self.exp_src_path            : Path = None
         pass
 
     def parse(self) -> None:
         try:
             with open(self.SYS_CONF) as sysf:
                 conf = json.load(sysf)
-                self.docker_url      : str = conf["docker-url"]  # e.g : squirre17/dirtypipe:1.0
+                self.docker_url      : str = conf["docker-url"]  # e.g : squirre17/dirtypipe:1.0 TODO: remove it 
                 self.linux_url       : str = conf["linux-url"]    
                 self.image_name      : str = self.docker_url.split("/")[1] # e.g. squirre17/dirtypipe:1.0 => dirtypipe:1.0 
                 self.kernel_src_path : str = Path.cwd() / "kernel-src"
