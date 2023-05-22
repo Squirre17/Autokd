@@ -23,7 +23,7 @@ class QemuConfig:
         self.smep  : bool = conf.get("smep", False)
         self.smap  : bool = conf.get("smap", False)
         self.kaslr : bool = conf.get("kaslr", False)
-        
+
         pass
 
 
@@ -99,12 +99,9 @@ class Config:
         try:# TODO:
             with open(self.USER_CONF) as userf:
                 conf = json.load(userf)
-                self.kernel_version       : str = conf["kernel-version"] # e.g. v5.10-rc1                
+                self.kernel_version      : str  = conf["kernel-version"] # e.g. v5.10-rc1                
                 self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
                 self.qemuopts = QemuConfig(conf)
-
-
-                pass
         except Exception:
             raise Exception
 
