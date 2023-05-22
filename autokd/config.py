@@ -47,8 +47,8 @@ class Config:
         self.docker_url              : str  = None
         self.linux_url               : str  = None
         self.kernel_version          : str  = None
-        self.target_name             : str  = None # merely name
-        self.target_path             : Path = None # full path
+        self.linux_target_name       : str  = None # merely name
+        self.linux_target_path       : Path = None # full path
         self.download_url            : str  = None
         self.unpacked_dir_name       : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir         : Path = None #

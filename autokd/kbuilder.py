@@ -24,14 +24,14 @@ class Kbuilder:
 
     def __init__(self) -> None:
         # self.kernel_src_path : Path = config.kernel_src_path # full path
-        config.target_name        : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
-        config.target_path        : Path = config.download_dir_path / config.target_name
+        config.linux_target_name        : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
+        config.linux_target_path        : Path = config.download_dir_path / config.linux_target_name
         config.download_url       : str  = "{url}/{target}".format(
             url = config.linux_url,
-            target = config.target_name
+            target = config.linux_target_name
         )
         
-        config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
+        config.unpacked_dir_name  : str  = config.linux_target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
         assert config.kernel_preroot_dir_path is not None
         config.kernel_root_dir    : Path = config.kernel_preroot_dir_path / config.unpacked_dir_name
         config.initrd_path        : Path = config.resource_dir_path / "initrd.cpio"
@@ -48,8 +48,8 @@ class Kbuilder:
             printer.note(f"make dir on {config.download_dir_path}")
             config.download_dir_path.mkdir()
         
-        if config.target_path.exists():
-            printer.note(f"{config.target_path} exists, skip download...")
+        if config.linux_target_path.exists():
+            printer.note(f"{config.linux_target_path} exists, skip download...")
             return self
         
         printer.info(f"Downloading {config.download_url} ... This may take a while!")
@@ -64,12 +64,12 @@ class Kbuilder:
         #         printer.fatal(f"{target_file} didn't exist")
         def redownload(url, filename):
             try:
-                urllib.request.urlretrieve(config.download_url, filename=config.target_path.absolute())
+                urllib.request.urlretrieve(config.download_url, filename=config.linux_target_path.absolute())
             except urllib.error.ContentTooShortError:
                 redownload(url, filename)
 
         try:
-            redownload(config.download_url, filename=config.target_path.absolute())
+            redownload(config.download_url, filename=config.linux_target_path.absolute())
         except urllib.error.HTTPError:
             printer.fatal(f"{config.download_url} didn't exist")
         return self
@@ -93,12 +93,12 @@ class Kbuilder:
         try:
             # add a check for download integrity
             try:
-                with tarfile.open(config.target_path, mode="r") as t:
+                with tarfile.open(config.linux_target_path, mode="r") as t:
                     members = t.getmembers()
                     for member in tqdm(iterable=members, total=len(members)):
                         t.extract(member, config.kernel_preroot_dir_path)
             except EOFError:
-                printer.fatal(f"{config.target_name} incomplete, abort (remove it and try again)")
+                printer.fatal(f"{config.linux_target_name} incomplete, abort (remove it and try again)")
 
             return self
         except tarfile.TarError:
