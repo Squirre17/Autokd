@@ -14,6 +14,12 @@ void read_from_dev(char *buf, i32 sz) {
     assert_eq(r, sz);
 }
 
+void open_dev(const char *dev, int oflag) {
+    devfd = open(dev, oflag);
+    if(devfd == -1)
+        PANIC("open %s failed", dev);
+}
+
 u64 _cs, _ss, _sp, _rflags;
 
 void save_state() {
