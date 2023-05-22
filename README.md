@@ -40,3 +40,9 @@ fill any thing in `config/user.json`
     }
 }
 ```
+
+# usage
+```shell
+chmod +x ./akd
+./akd run
+```
