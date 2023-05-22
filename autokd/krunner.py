@@ -44,7 +44,7 @@ class Krunner:
             -s
         '''
 
-        assert config.bzimage_path.exists()
+        assert config.bziamge_path.exists()
         assert config.modified_initrd_path.exists()
 
         # generate cpu_protect str
@@ -62,12 +62,15 @@ class Krunner:
         # generate kaslr str
         kaslr = "kaslr" if config.qemuopts.kaslr else "nokaslr"
 
+        #generate pti str
+        kpti  = "pti" if config.qemuopts.kpti else "nopti"
+
         # temp
         cmd = '''qemu-system-x86_64
             -m 256M
             -kernel {bzimage_path}
             -initrd {modified_initrd_path}
-            -append "console=ttyS0 oops=panic panic=1 quiet {kaslr}"
+            -append "console=ttyS0 oops=panic panic=1 quiet {kaslr} {kpti}"
             -no-reboot
             -cpu qemu64{cpu_protect}
             -smp {ct_num}
@@ -76,11 +79,12 @@ class Krunner:
             -net user
             -monitor /dev/null
             -s'''.format(
-                bzimage_path          = config.bzimage_path,
+                bzimage_path          = config.bziamge_path,
                 modified_initrd_path  = config.modified_initrd_path,
                 cpu_protect           = cpu_protect,
                 ct_num                = ct_num,
-                kaslr                 = kaslr
+                kaslr                 = kaslr,
+                kpti                  = kpti
         )
 
         # overhead is very low so dont need to 

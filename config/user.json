@@ -7,11 +7,12 @@
         "semp" : false,
         "samp" : false,
         "kaslr" : false,
+        "kpti" : false,
         "cores" : 1,
         "threads" : 1
     },
     "ctf" : {
-        "use-ctf-vmlinux" : true,
-        "vmlinux-path" : "./tmp/vmlinux"
+        "use-ctf-bzimage" : false,
+        "bzimage-path" : "./tmp/vmlinux"
     }
 }

@@ -23,6 +23,7 @@ class QemuConfig:
         self.smep     : bool = conf.get("smep", False)
         self.smap     : bool = conf.get("smap", False)
         self.kaslr    : bool = conf.get("kaslr", False)
+        self.kpti     : bool = conf.get("kpti", False)
         self.cores    : int  = conf.get("cores", 1)
         self.threads  : int  = conf.get("threads", 1)
 
@@ -34,10 +35,10 @@ class MsicConfig:
         
 class CtfConfig:
     def __init__(self, conf) -> None:
-        self.enabled : bool = conf["use-ctf-vmlinux"]
+        self.enabled : bool = conf["ctf"]["use-ctf-bzimage"]
         if self.enabled:
-            self.vmlinux_path = Path(conf["vmlinux-path"])
-            assert self.vmlinux_path.exists()
+            self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
+            assert self.bzimage_path.exists()
 
     
 class Config:
@@ -65,7 +66,7 @@ class Config:
         self.download_url            : str  = None
         self.unpacked_dir_name       : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir         : Path = None #
-        self.bzimage_path            : Path = None
+        self.__bziamge_path          : Path = None
         self.initrd_path             : Path = None
         self.modified_initrd_path    : Path = None
         self.initrd_is_root_used     : bool = False
@@ -97,7 +98,10 @@ class Config:
         self.qemuopts                : QemuConfig = None
 
         # msic 
-        self.msicopts                 : MsicConfig = None
+        self.msicopts                : MsicConfig = None
+
+        # ctf
+        self.ctfopts                 : CtfConfig = None 
 
     def parse(self) -> None:
         try:
@@ -120,10 +124,21 @@ class Config:
                 self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
                 self.qemuopts                   = QemuConfig(conf)
                 self.msicopts                   = MsicConfig(conf)
+                self.ctfopts                    = CtfConfig(conf)
         except Exception:
             raise Exception
 
+    @property
+    def bziamge_path(self) -> Path:
+        if self.ctfopts.enabled:
+            return self.ctfopts.bzimage_path
+        else:
+            return self.__bziamge_path
 
+    @bziamge_path.setter
+    def bziamge_path(self, path : Path) -> None:
+        self.__bziamge_path = path
+        
 config = Config()
 config.parse()
 
