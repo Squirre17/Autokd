@@ -18,6 +18,15 @@ def return_no_none(f : Callable) -> Callable:
         return ret
     return wrapper
 
+class QemuConfig:
+    def __init__(self, conf) -> None:
+        self.smep  : bool = conf.get("smep", False)
+        self.smap  : bool = conf.get("smap", False)
+        self.kaslr : bool = conf.get("kaslr", False)
+        
+        pass
+
+
 class Config:
     '''
     parse user/sys config file (current use .json).
@@ -70,7 +79,9 @@ class Config:
         
         # exp
         self.exp_src_path            : Path = None
-        pass
+
+        # qemu options
+        self.qemuopts                : QemuConfig = None
 
     def parse(self) -> None:
         try:
@@ -88,15 +99,10 @@ class Config:
         try:# TODO:
             with open(self.USER_CONF) as userf:
                 conf = json.load(userf)
-                self.kernel_version : str = conf["kernel-version"] # e.g. v5.10-rc1
-                
-                is_root_use : str = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
-                if is_root_use.lower() == "true":
-                    self.initrd_is_root_used = True
-                elif is_root_use.lower() == "false":
-                    self.initrd_is_root_used = False
-                else:
-                    raise KeyError # TODO
+                self.kernel_version       : str = conf["kernel-version"] # e.g. v5.10-rc1                
+                self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
+                self.qemuopts = QemuConfig(conf)
+
 
                 pass
         except Exception:

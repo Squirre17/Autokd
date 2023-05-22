@@ -1,4 +1,9 @@
 {
     "kernel-version" : "5.10",
-    "initrd-is-root-used" : "false"
+    "initrd-is-root-used" : false,
+    "qemu-option" : {
+        "semp" : false,
+        "samp" : false,
+        "kaslr" : false
+    }
 }
