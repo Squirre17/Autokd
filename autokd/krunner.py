@@ -1,12 +1,13 @@
 import os
 import urllib
+import shutil
+import tarfile
+import requests
 import urllib.error
 import urllib.request
-import requests
-import tarfile
-import shutil
+
+import subprocess           as sp
 import autokd.utils.printer as printer
-import subprocess as sp
 
 from tqdm                import (tqdm)
 from typing              import (Type)
