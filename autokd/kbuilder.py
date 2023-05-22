@@ -22,20 +22,17 @@ class Kbuilder:
     kernel builder : be responsible for kernel donwload, unpack, cmopile and clean so on
     '''
 
-    DOWNLOAD_PATH : Path = Path.absolute(Path.cwd() / "download")
-    
     def __init__(self) -> None:
         # self.kernel_src_path : Path = config.kernel_src_path # full path
         config.target_name        : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
-        config.target_path        : Path = self.DOWNLOAD_PATH / config.target_name
+        config.target_path        : Path = config.download_dir_path / config.target_name
         config.download_url       : str  = "{url}/{target}".format(
             url = config.linux_url,
             target = config.target_name
         )
-        config.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
+        
         config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
         config.kernel_root_dir    : Path = config.kernel_preroot_dir / config.unpacked_dir_name
-        config.resource_dir_path       : Path = Path.cwd() / "resource"
         config.initrd_path        : Path = config.resource_dir_path / "initrd.cpio"
 
         # temp
@@ -46,9 +43,9 @@ class Kbuilder:
         e.g. : wget https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.0.tar.gz
                 url is https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6 TODO:
         '''
-        if not self.DOWNLOAD_PATH.exists():
-            printer.note(f"make dir on {self.DOWNLOAD_PATH}")
-            self.DOWNLOAD_PATH.mkdir()
+        if not config.download_dir_path.exists():
+            printer.note(f"make dir on {config.download_dir_path}")
+            config.download_dir_path.mkdir()
         
         if config.target_path.exists():
             printer.note(f"{config.target_path} exists, skip download...")

@@ -1,0 +1,27 @@
+#!/bin/bash
+# -e if error happen , exit immediately
+# -u if unassigned argu exist , exit immediately
+set -eu
+path=$PWD # path in the time executing
+RED="\033[31m"
+BLUE="\033[34m"
+GREEN="\033[32m"
+AMARANTH='\033[35m'
+DFT="\033[0m" # default
+
+ERR="${RED}[!]${DFT}"
+NOTE="${BLUE}[*]${DFT}"
+INFO="${GREEN}[+]${DFT}"
+
+if [ $# -ne 1 ]; then
+    echo -e "${ERR} must provide a argument"
+    exit 1
+fi
+
+valid_list=("run" "recompile@todo" "ctf@todo" "clean")
+if [[ ! " ${valid_list[@]} " =~ " $1 " ]]; then
+    echo -e "${ERR} argu \`$1\` must in ${valid_list[*]}"
+    exit 1
+fi
+
+

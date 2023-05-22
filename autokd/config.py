@@ -27,27 +27,33 @@ class Config:
 
     def __init__(self) -> None:
 
+        # sanity check for cwd
+        
+
         # url path
-        self.docker_url             : str  = None
-        self.linux_url              : str  = None
-        self.kernel_version         : str  = None
-        self.target_name            : str  = None # merely name
-        self.target_path            : Path = None # full path
-        self.download_url           : str  = None
-        self.kernel_preroot_dir     : Path = None # not real root
-        self.unpacked_dir_name      : str  = None # e.g. linux-2.6.0
-        self.kernel_root_dir        : Path = None #
-        self.bzimage_path           : Path = None
-        self.initrd_path            : Path = None
-        self.modified_initrd_path   : Path = None
-        self.initrd_is_root_used    : bool = False
+        self.docker_url              : str  = None
+        self.linux_url               : str  = None
+        self.kernel_version          : str  = None
+        self.target_name             : str  = None # merely name
+        self.target_path             : Path = None # full path
+        self.download_url            : str  = None
+        self.kernel_preroot_dir      : Path = None # not real root
+        self.unpacked_dir_name       : str  = None # e.g. linux-2.6.0
+        self.kernel_root_dir         : Path = None #
+        self.bzimage_path            : Path = None
+        self.initrd_path             : Path = None
+        self.modified_initrd_path    : Path = None
+        self.initrd_is_root_used     : bool = False
 
         # dir path
-        self.resource_dir_path      : Path = Path.cwd() / "resource"
-        self.scripts_dir_path       : Path = Path.cwd() / "scripts"
-        self.unpacked_fs_dir_path   : Path = Path.cwd() / "fsroot"
+        self.resource_dir_path       : Path = Path.cwd() / "resource"
+        self.scripts_dir_path        : Path = Path.cwd() / "scripts"
+        self.unpacked_fs_dir_path    : Path = Path.cwd() / "fsroot"
+        self.kernel_preroot_dir_path : Path = Path.cwd() / "kernel-root" # not real root
+        self.download_dir_path       : Path = Path.cwd() / "download"
+
         # qemu
-        self.qemu_script_path       : Path = None
+        self.qemu_script_path        : Path = None
         pass
 
     def parse(self) -> None:
