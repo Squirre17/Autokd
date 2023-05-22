@@ -119,10 +119,12 @@ class Krunner:
         assert config.qemu_script_path.exists()
         "todo : maybe this part let user to do more batter"
         
-        printer.note("run qemu now [Y/n] ", not_line_break=True)# tmp
-        opt = input("")
-        if opt == "n":
-            printer.fatal("exit")
+        if config.msicopts.need_confirm:
+            printer.note("run qemu now [Y/n] ", not_line_break=True)# tmp
+            opt = input("")
+            if opt == "n":
+                printer.fatal("exit")
+            
         
         assert os.access(config.qemu_script_path, os.X_OK)
         sp.run([config.qemu_script_path.absolute()], shell=True)

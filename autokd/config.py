@@ -90,7 +90,7 @@ class Config:
         self.qemuopts                : QemuConfig = None
 
         # msic 
-        self.msic                    : MsicConfig = None
+        self.msicopts                    : MsicConfig = None
 
     def parse(self) -> None:
         try:
@@ -111,7 +111,7 @@ class Config:
                 self.kernel_version      : str  = conf["kernel-version"] # e.g. v5.10-rc1                
                 self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
                 self.qemuopts                   = QemuConfig(conf)
-                self.msic                       = MsicConfig(conf)
+                self.msicopts                   = MsicConfig(conf)
         except Exception:
             raise Exception
 
