@@ -42,11 +42,14 @@ def warn(msg):
     print(prompt + body, end = "")
     print(msg)
 
-def note(msg):
+def note(msg, not_line_break=False):
     prompt = Color.colorify("[*]" ,"blue")
     body   = " NOTE  : "
     print(prompt + body, end = "")
-    print(msg)
+    if not not_line_break:
+        print(msg)
+    else:
+        print(msg, end="")
 
 
 def err_print_exc(msg):

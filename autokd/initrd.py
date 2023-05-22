@@ -4,19 +4,20 @@ deal with initrd.cpio
 
 import os
 import urllib
+import shutil
+import tarfile
+import requests
 import urllib.error
 import urllib.request
-import requests
-import tarfile
-import shutil
-import autokd.utils.printer as printer
-import subprocess as sp
 
-from tqdm             import (tqdm)
-from typing           import (Type)
-from pathlib          import (Path)
-from typing           import (List)
-from loguru           import (logger)
+import subprocess           as sp
+import autokd.utils.printer as printer
+
+from tqdm                import (tqdm)
+from typing              import (Type)
+from pathlib             import (Path)
+from typing              import (List)
+from loguru              import (logger)
 from autokd.utils.dynbar import (Dynbar)
 from autokd.config       import (config)
 
@@ -56,8 +57,7 @@ class Initrd:
         printer.info("packing initrd.cpio...")
         
         cur_dir = Path.cwd()
-        os.chdir(config.resource_dir_path)
-        logger.debug(self.packcmd)
+        os.chdir(config.unpacked_fs_dir_path)
         sp.run(self.packcmd, shell=True)
         sp.run("chmod +x {}".format(config.modified_initrd_path.absolute()), shell=True)
         os.chdir(cur_dir)

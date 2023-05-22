@@ -41,14 +41,13 @@ class Krunner:
         '''
 
         assert config.bzimage_path.exists()
-        assert config.initrd_path.exists()
+        assert config.modified_initrd_path.exists()
 
         # temp
-        cmd = '''
-        qemu-system-x86_64
+        cmd = '''qemu-system-x86_64
             -m 256M
             -kernel {bzimage_path}
-            -initrd {initrd_path}
+            -initrd {modified_initrd_path}
             -append "console=ttyS0 oops=panic panic=1 quiet nokaslr"
             -no-reboot
             -cpu qemu64
@@ -56,18 +55,19 @@ class Krunner:
             -net nic,model=virtio
             -net user
             -monitor /dev/null
-            -s
-        '''.format(
-            bzimage_path = config.bzimage_path,
-            initrd_path  = config.initrd_path
+            -s'''.format(
+            bzimage_path          = config.bzimage_path,
+            modified_initrd_path  = config.modified_initrd_path
         )
 
-        if config.qemu_script_path.exists():
-            printer.warn("TEMP : not change if exist")
-            return self
+        # overhead is very low so dont need to 
+        # if config.qemu_script_path.exists():
+        #     printer.warn("TEMP : not change if exist")
+        #     return self
 
+        logger.debug("write to {}".format(config.qemu_script_path.absolute()))
         with open(config.qemu_script_path,  "+w") as f:
-            f.write("\\\n".join(cmd.splitlines()))
+            f.write("  \\\n".join(cmd.splitlines()))
 
         os.chmod(config.qemu_script_path, 0o755)
 
@@ -78,7 +78,10 @@ class Krunner:
         assert config.qemu_script_path.exists()
         "todo : maybe this part let user to do more batter"
         
-        input("run qemu now [Y/n]")# tmp
+        printer.note("run qemu now [Y/n] ", not_line_break=True)# tmp
+        opt = input("")
+        if opt == "n":
+            printer.fatal("exit")
         
         assert os.access(config.qemu_script_path, os.X_OK)
         sp.run([config.qemu_script_path.absolute()], shell=True)
