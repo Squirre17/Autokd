@@ -18,6 +18,7 @@ typedef int64_t  i64;
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <assert.h>
 
 #define cBLK "\x1b[0;30m"  /* black  */    
 #define cRED "\x1b[0;31m"  /* red    */   
