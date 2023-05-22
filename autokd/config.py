@@ -20,9 +20,11 @@ def return_no_none(f : Callable) -> Callable:
 
 class QemuConfig:
     def __init__(self, conf) -> None:
-        self.smep  : bool = conf.get("smep", False)
-        self.smap  : bool = conf.get("smap", False)
-        self.kaslr : bool = conf.get("kaslr", False)
+        self.smep     : bool = conf.get("smep", False)
+        self.smap     : bool = conf.get("smap", False)
+        self.kaslr    : bool = conf.get("kaslr", False)
+        self.cores    : int  = conf.get("cores", 1)
+        self.threads  : int  = conf.get("threads", 1)
 
         pass
 

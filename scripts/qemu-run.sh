@@ -5,6 +5,7 @@ qemu-system-x86_64  \
             -append "console=ttyS0 oops=panic panic=1 quiet nokaslr"  \
             -no-reboot  \
             -cpu qemu64  \
+            -smp cores=1,threads=1  \
             -nographic  \
             -net nic,model=virtio  \
             -net user  \

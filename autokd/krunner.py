@@ -41,27 +41,46 @@ class Krunner:
             -net nic,model=virtio \
             -net user \
             -device e1000 \
-            -monitor /dev/null
+            -s
         '''
 
         assert config.bzimage_path.exists()
         assert config.modified_initrd_path.exists()
+
+        # generate cpu_protect str
+        cpu_protect = ""
+        if config.qemuopts.smep:
+            cpu_protect += ",+smep"
+        if config.qemuopts.smap:
+            cpu_protect += ",+smap"
+
+        # generate ct_num str
+        ct_num = "cores={},threads={}".format(
+            config.qemuopts.cores, config.qemuopts.threads
+        )
+
+        # generate kaslr str
+        kaslr = "kaslr" if config.qemuopts.kaslr else "nokaslr"
 
         # temp
         cmd = '''qemu-system-x86_64
             -m 256M
             -kernel {bzimage_path}
             -initrd {modified_initrd_path}
-            -append "console=ttyS0 oops=panic panic=1 quiet nokaslr"
+            -append "console=ttyS0 oops=panic panic=1 quiet {kaslr}"
             -no-reboot
-            -cpu qemu64
+            -cpu qemu64{cpu_protect}
+            -smp {ct_num}
             -nographic
             -net nic,model=virtio
             -net user
             -monitor /dev/null
             -s'''.format(
-            bzimage_path          = config.bzimage_path,
-            modified_initrd_path  = config.modified_initrd_path
+                bzimage_path          = config.bzimage_path,
+                modified_initrd_path  = config.modified_initrd_path,
+                cpu_protect           = cpu_protect,
+                ct_num                = ct_num,
+                kaslr                 = kaslr
         )
 
         # overhead is very low so dont need to 
@@ -69,7 +88,6 @@ class Krunner:
         #     printer.warn("TEMP : not change if exist")
         #     return self
 
-        logger.debug("write to {}".format(config.qemu_script_path.absolute()))
         with open(config.qemu_script_path,  "+w") as f:
             f.write("  \\\n".join(cmd.splitlines()))
 

@@ -5,6 +5,8 @@
     "qemu-option" : {
         "semp" : false,
         "samp" : false,
-        "kaslr" : false
+        "kaslr" : false,
+        "cores" : 1,
+        "threads" : 1
     }
 }
