@@ -27,8 +27,8 @@ fi
 
 case "$1" in
     run)
-        echo "Executing command for 'run'"
-        py main.py
+        echo -e "${INFO} run the kernel build procedure"
+        python3 main.py
         ;;
     menu@todo)
         echo "Executing command for 'menu@todo'"

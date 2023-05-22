@@ -22,8 +22,9 @@ class Krunner:
     def __init__(self) -> None:
         config.qemu_script_path = config.scripts_dir_path / "qemu-run.sh"
         config.exp_src_path     = Path.cwd() / "exp.c"
-        assert config.exp_src_path.exists()
-        ...
+        if not config.exp_src_path.exists():
+            printer.fatal("{} not found, abort".format(config.exp_src_path.absolute()))
+        
 
     def make_run_script(self) -> Type["Krunner"]:
         '''shell
@@ -78,6 +79,21 @@ class Krunner:
 
     def compile_exp(self) -> Type["Krunner"]:
 
+        assert config.exp_src_path.exists()
+
+        exp_output_path = config.unpacked_fs_dir_path / "exp"
+        cmd = "gcc -g -o {out} {src} --static -lpthread".format(
+            out = exp_output_path.absolute(),
+            src = config.exp_src_path.absolute()
+        ) # TODO: maybe provide by user?
+
+        printer.info("conpiling the exp...")
+        result = sp.run(cmd, shell=True) # TODO: configuable for capture output , capture_output=True)
+        if result.returncode != 0:
+            printer.fatal(f"compile failed with result {result}")
+
+        # TODO: symbol recover
+        return self
 
         
     def run(self) -> None:

@@ -9,7 +9,7 @@ def main():
     checker.proxy()
     kbuilder.download().unpack().compile()
     initrd.unpack().pack()
-    krunner.make_run_script().run()
+    krunner.make_run_script().compile_exp().run()
     # kbuilder.unpack()
     # kbuilder.()
 
