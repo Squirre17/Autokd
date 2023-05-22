@@ -13,6 +13,7 @@
     },
     "ctf" : {
         "use-ctf-bzimage" : false,
-        "bzimage-path" : "./tmp/vmlinux"
+        "bzimage-path" : "/tmp/akd/kernel-challenge/knote/bzImage",
+        "use-custom-qemu-script" : false
     }
 }

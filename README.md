@@ -20,3 +20,4 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 # Tips
 - If want unpack cpio again. just remove the `resource/initrd.modified.cpio`
 - bzImage for qemu launch, vmlinux for gdb debug
+- `use-custom-qemu-script` option allow user to use costom script(e.g. ctf provided) to launch qemu, which location is fixed at `./qemu-custom.sh`

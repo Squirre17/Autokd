@@ -37,8 +37,13 @@ class CtfConfig:
     def __init__(self, conf) -> None:
         self.enabled : bool = conf["ctf"]["use-ctf-bzimage"]
         if self.enabled:
+            printer.note("use ctf provided bzimage")
             self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
             assert self.bzimage_path.exists()
+        
+        self.use_custom_qemu_script : bool = conf["ctf"].get("use-custom-qemu-script", False)
+        if self.use_custom_qemu_script:
+            printer.note("use custom qemu script")
 
     
 class Config:
@@ -89,7 +94,7 @@ class Config:
         create_if_not_exist(self.download_dir_path) 
 
         # qemu
-        self.qemu_script_path        : Path = None
+        self.__qemu_script_path      : Path = None
         
         # exp
         self.exp_src_path            : Path = None
@@ -111,7 +116,6 @@ class Config:
                 self.linux_url       : str = conf["linux-url"]    
                 self.image_name      : str = self.docker_url.split("/")[1] # e.g. squirre17/dirtypipe:1.0 => dirtypipe:1.0 
                 self.kernel_src_path : str = Path.cwd() / "kernel-src"
-                logger.debug(self.docker_url);
 
         except FileNotFoundError:
             printer.fatal("{} not found".format(os.path.abspath(self.SYS_CONF)))
@@ -138,6 +142,17 @@ class Config:
     @bziamge_path.setter
     def bziamge_path(self, path : Path) -> None:
         self.__bziamge_path = path
+
+    @property
+    def qemu_script_path(self) -> Path:
+        if self.ctfopts.use_custom_qemu_script:
+            return Path.cwd() / "qemu-custom.sh"
+        else:
+            return self.__qemu_script_path
+    
+    @qemu_script_path.setter
+    def qemu_script_path(self, path : Path) -> None:
+        self.__qemu_script_path = path
         
 config = Config()
 config.parse()

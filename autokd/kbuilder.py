@@ -133,7 +133,6 @@ class Kbuilder:
         cmd = f"make bzImage -j{self.nproc}"
         printer.note(f"start to compile kernel with nproc({self.nproc})")
         os.chdir(config.kernel_root_dir)
-        logger.debug(config.kernel_root_dir)
         sp.run(cmd, shell=True)
         os.chdir(cur_dir)
 

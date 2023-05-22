@@ -78,7 +78,6 @@ class Initrd:
 
         cur_dir = Path.cwd()
         os.chdir(config.unpacked_fs_dir_path)
-        logger.debug(self.unpackcmd)
         sp.run(self.unpackcmd, shell=True)
         os.chdir(cur_dir)
 

@@ -5,6 +5,7 @@ from autokd.kdocker  import kdocker
 from autokd.checker  import checker
 from autokd.kbuilder import kbuilder
 from autokd.krunner  import krunner
+from autokd.config   import config
 import autokd.utils.printer as printer
 
 def run():
@@ -16,6 +17,9 @@ def run():
     # kbuilder.()
 
 def ctf():
+    if not config.ctfopts.enabled:
+        printer.fatal("only enable ctf option in user.json can use ctf mode")
+        
     initrd.unpack().pack()
     krunner.make_run_script().compile_exp().run()
 
