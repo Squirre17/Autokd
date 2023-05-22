@@ -5,7 +5,7 @@ import urllib.request
 import requests
 import tarfile
 import shutil
-import akd.utils.printer as printer
+import autokd.utils.printer as printer
 import subprocess as sp
 
 from tqdm             import (tqdm)
@@ -13,8 +13,8 @@ from typing           import (Type)
 from pathlib          import (Path)
 from typing           import (List)
 from loguru           import (logger)
-from akd.utils.dynbar import (Dynbar)
-from akd.config       import (config)
+from autokd.utils.dynbar import (Dynbar)
+from autokd.config       import (config)
 
 class Krunner:
 
@@ -77,6 +77,8 @@ class Krunner:
 
         assert config.qemu_script_path.exists()
         "todo : maybe this part let user to do more batter"
+        
+        input("run qemu now [Y/n]")# tmp
         
         assert os.access(config.qemu_script_path, os.X_OK)
         sp.run([config.qemu_script_path.absolute()], shell=True)

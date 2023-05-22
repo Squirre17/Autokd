@@ -1,7 +1,7 @@
 import sys
 import traceback
 
-from akd.utils.color import Color
+from autokd.utils.color import Color
 
 def info(msg):
     prompt = Color.colorify("[+]" ,"green")

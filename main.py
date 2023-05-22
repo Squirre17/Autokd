@@ -1,9 +1,9 @@
-from akd.initrd   import initrd
-from akd.kdocker  import kdocker 
-from akd.checker  import checker
-from akd.kbuilder import kbuilder
-from akd.krunner  import krunner
-import akd.utils.printer as printer
+from autokd.initrd   import initrd
+from autokd.kdocker  import kdocker 
+from autokd.checker  import checker
+from autokd.kbuilder import kbuilder
+from autokd.krunner  import krunner
+import autokd.utils.printer as printer
 
 def main():
     checker.proxy()

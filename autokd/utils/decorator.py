@@ -3,10 +3,10 @@ all decorators
 '''
 import time
 import functools
-import akd.utils.printer as printer
+import autokd.utils.printer as printer
 
 from typing          import (Callable, Any)
-from akd.utils.color import (Color)
+from autokd.utils.color import (Color)
 
 
 def deprecated(func : Callable) -> Callable:

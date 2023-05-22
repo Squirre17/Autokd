@@ -1,7 +1,7 @@
 import os
 import json
 import functools
-import akd.utils.printer as printer
+import autokd.utils.printer as printer
 
 from pathlib import (Path)
 from loguru  import (logger)

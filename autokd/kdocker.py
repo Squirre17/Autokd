@@ -2,10 +2,10 @@ import os
 import docker
 import docker.errors
 import subprocess as sp
-import akd.utils.printer as printer
+import autokd.utils.printer as printer
 
 from docker.models.images import (Image)
-from akd.config           import (config)
+from autokd.config           import (config)
 from docker               import (DockerClient)
 from typing               import (List, Optional, Type)
 

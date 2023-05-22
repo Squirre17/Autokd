@@ -3,13 +3,13 @@ import urllib
 import urllib.error
 import urllib.request
 import requests
-import akd.utils.printer as printer
+import autokd.utils.printer as printer
 
 from typing           import (Type)
 from pathlib          import (Path)
 from typing           import (List)
-from akd.utils.dynbar import (Dynbar)
-from akd.config       import (config)
+from autokd.utils.dynbar import (Dynbar)
+from autokd.config       import (config)
 
 class Checker:
     PROXY_CHECK_LIST : List[str] = [
