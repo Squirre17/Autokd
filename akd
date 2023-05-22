@@ -18,10 +18,38 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-valid_list=("run" "recompile@todo" "ctf@todo" "clean")
+valid_list=("run" "menu@todo" "recompile@todo" "ctf@todo" "clean")
 if [[ ! " ${valid_list[@]} " =~ " $1 " ]]; then
-    echo -e "${ERR} argu \`$1\` must in ${valid_list[*]}"
+    
     exit 1
 fi
 
 
+case "$1" in
+    run)
+        echo "Executing command for 'run'"
+        py main.py
+        ;;
+    menu@todo)
+        echo "Executing command for 'menu@todo'"
+        # Run the command for 'menu@todo'
+        ;;
+    recompile@todo)
+        echo "Executing command for 'recompile@todo'"
+        # Run the command for 'recompile@todo'
+        ;;
+    ctf@todo)
+        echo "Executing command for 'ctf@todo'"
+        # Run the command for 'ctf@todo'
+        ;;
+    clean)
+        echo "Executing command for 'clean'"
+        rm -rf fs-root
+        rm -rf kernel-root
+        rm -rf download
+        ;;
+    *)
+        echo -e "${ERR} argu \`$1\` must in ${valid_list[*]}"
+        exit 1
+        ;;
+esac

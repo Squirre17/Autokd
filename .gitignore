@@ -4,4 +4,5 @@ download
 **/__pycache__
 awd/__pycache__
 fsroot
+fs-root
 resource/initrd.modified.cpio

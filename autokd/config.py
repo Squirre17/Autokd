@@ -28,7 +28,7 @@ class Config:
     def __init__(self) -> None:
 
         # sanity check for cwd
-        
+        cwd = Path.cwd() # TODO:
 
         # url path
         self.docker_url              : str  = None
@@ -37,7 +37,6 @@ class Config:
         self.target_name             : str  = None # merely name
         self.target_path             : Path = None # full path
         self.download_url            : str  = None
-        self.kernel_preroot_dir      : Path = None # not real root
         self.unpacked_dir_name       : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir         : Path = None #
         self.bzimage_path            : Path = None
@@ -46,14 +45,25 @@ class Config:
         self.initrd_is_root_used     : bool = False
 
         # dir path
+        def create_if_not_exist(p : Path) -> None:
+            if not p.exists():
+                p.mkdir()
+            
         self.resource_dir_path       : Path = Path.cwd() / "resource"
         self.scripts_dir_path        : Path = Path.cwd() / "scripts"
-        self.unpacked_fs_dir_path    : Path = Path.cwd() / "fsroot"
+        self.unpacked_fs_dir_path    : Path = Path.cwd() / "fs-root"
         self.kernel_preroot_dir_path : Path = Path.cwd() / "kernel-root" # not real root
         self.download_dir_path       : Path = Path.cwd() / "download"
 
+        create_if_not_exist(self.resource_dir_path)
+        create_if_not_exist(self.scripts_dir_path)
+        create_if_not_exist(self.unpacked_fs_dir_path)
+        create_if_not_exist(self.kernel_preroot_dir_path)
+        create_if_not_exist(self.download_dir_path) 
+        
         # qemu
         self.qemu_script_path        : Path = None
+        printer.dbg(self.kernel_preroot_dir_path.absolute())
         pass
 
     def parse(self) -> None:

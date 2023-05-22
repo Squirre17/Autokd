@@ -32,7 +32,8 @@ class Kbuilder:
         )
         
         config.unpacked_dir_name  : str  = config.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
-        config.kernel_root_dir    : Path = config.kernel_preroot_dir / config.unpacked_dir_name
+        assert config.kernel_preroot_dir_path is not None
+        config.kernel_root_dir    : Path = config.kernel_preroot_dir_path / config.unpacked_dir_name
         config.initrd_path        : Path = config.resource_dir_path / "initrd.cpio"
 
         # temp
@@ -79,12 +80,12 @@ class Kbuilder:
         '''
 
         # sanity check for skip unpack
-        if config.kernel_preroot_dir.exists() and len([_ for _ in config.kernel_preroot_dir.iterdir()]) != 0:
+        if config.kernel_preroot_dir_path.exists() and len([_ for _ in config.kernel_preroot_dir_path.iterdir()]) != 0:
             printer.note("root dir exist, do not unpack again")
             return self
         else:
             try:
-                config.kernel_preroot_dir.mkdir()
+                config.kernel_preroot_dir_path.mkdir()
             except FileExistsError:
                 pass
 
@@ -95,7 +96,7 @@ class Kbuilder:
                 with tarfile.open(config.target_path, mode="r") as t:
                     members = t.getmembers()
                     for member in tqdm(iterable=members, total=len(members)):
-                        t.extract(member, config.kernel_preroot_dir)
+                        t.extract(member, config.kernel_preroot_dir_path)
             except EOFError:
                 printer.fatal(f"{config.target_name} incomplete, abort (remove it and try again)")
 

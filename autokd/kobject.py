@@ -30,6 +30,6 @@ class Kobj:
             url = config.linux_url,
             target = self.target_name
         )
-        self.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
+        # self.kernel_preroot_dir : Path = Path.cwd() / "kernel-root" # not real root
         self.unpacked_dir_name  : str  = self.target_name.replace(".tar.gz", "") # convert linux-2.6.0.tar.gz => linux-2.6.0
-        self.kernel_root_dir    : Path = self.kernel_preroot_dir / self.unpacked_dir_name
+        # self.kernel_root_dir    : Path = self.kernel_preroot_dir / self.unpacked_dir_name
