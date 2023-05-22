@@ -97,7 +97,7 @@ class Config:
         self.qemuopts                : QemuConfig = None
 
         # msic 
-        self.msicopts                    : MsicConfig = None
+        self.msicopts                 : MsicConfig = None
 
     def parse(self) -> None:
         try:
@@ -115,6 +115,7 @@ class Config:
         try:# TODO:
             with open(self.USER_CONF) as userf:
                 conf = json.load(userf)
+                self.nproc               : int  = conf["nproc"]
                 self.kernel_version      : str  = conf["kernel-version"] # e.g. v5.10-rc1                
                 self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
                 self.qemuopts                   = QemuConfig(conf)

@@ -14,3 +14,6 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 - provide a vmlinux and initrd.cpio
 
 ## 
+
+# Tips
+- If want unpack cpio again. just remove the `resource/initrd.modified.cpio`

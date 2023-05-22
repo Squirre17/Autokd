@@ -2,6 +2,7 @@
     "kernel-version" : "5.10",
     "initrd-is-root-used" : false,
     "confirmation-before-running" : true,
+    "nproc" : 2,
     "qemu-option" : {
         "semp" : false,
         "samp" : false,
@@ -11,6 +12,6 @@
     },
     "ctf" : {
         "use-ctf-vmlinux" : true,
-        "vmlinux-path" : "TODO"
+        "vmlinux-path" : "./tmp/vmlinux"
     }
 }
