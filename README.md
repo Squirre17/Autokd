@@ -10,9 +10,6 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 
 
 # TODO
-## ctf
-- provide a vmlinux and initrd.cpio
-
 ## compile
 - gcc argument configurable
 - musl support
@@ -21,3 +18,25 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 - If want unpack cpio again. just remove the `resource/initrd.modified.cpio`
 - bzImage for qemu launch, vmlinux for gdb debug
 - `use-custom-qemu-script` option allow user to use costom script(e.g. ctf provided) to launch qemu, which location is fixed at `./qemu-custom.sh`
+fill any thing in `config/user.json`
+```json
+{
+    "kernel-version" : "5.10",
+    "initrd-is-root-used" : false,
+    "confirmation-before-running" : true,
+    "nproc" : 2,
+    "qemu-option" : {
+        "semp" : false,
+        "samp" : false,
+        "kaslr" : false,
+        "kpti" : false,
+        "cores" : 1,
+        "threads" : 1
+    },
+    "ctf" : {
+        "use-ctf-bzimage" : false,
+        "bzimage-path" : "/tmp/akd/kernel-challenge/knote/bzImage",
+        "use-custom-qemu-script" : false
+    }
+}
+```
