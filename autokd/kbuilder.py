@@ -24,8 +24,8 @@ class Kbuilder:
 
     def __init__(self) -> None:
         # self.kernel_src_path : Path = config.kernel_src_path # full path
-        config.linux_target_name        : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
-        config.linux_target_path        : Path = config.download_dir_path / config.linux_target_name
+        config.linux_target_name  : str  = "linux-" + config.kernel_version + ".tar.gz"                      # full path
+        config.linux_target_path  : Path = config.download_dir_path / config.linux_target_name
         config.download_url       : str  = "{url}/{target}".format(
             url = config.linux_url,
             target = config.linux_target_name
