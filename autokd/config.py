@@ -32,7 +32,14 @@ class MsicConfig:
     def __init__(self, conf) -> None:
         self.need_confirm : bool = conf.get("confirmation-before-running", False)
         
+class CtfConfig:
+    def __init__(self, conf) -> None:
+        self.enabled : bool = conf["use-ctf-vmlinux"]
+        if self.enabled:
+            self.vmlinux_path = Path(conf["vmlinux-path"])
+            assert self.vmlinux_path.exists()
 
+    
 class Config:
     '''
     parse user/sys config file (current use .json).

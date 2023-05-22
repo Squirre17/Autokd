@@ -28,7 +28,12 @@ fi
 case "$1" in
     run)
         echo -e "${INFO} run the kernel build procedure"
-        python3 main.py
+        python3 main.py run
+        ;;
+    build)
+        echo -e "${ERR} TODO"
+        exit 1
+        # python3 main.py run
         ;;
     menu@todo)
         echo "Executing command for 'menu@todo'"
@@ -39,8 +44,8 @@ case "$1" in
         # Run the command for 'recompile@todo'
         ;;
     ctf@todo)
-        echo "Executing command for 'ctf@todo'"
-        # Run the command for 'ctf@todo'
+        echo -e "${INFO} run the ctf kernel"
+        python3 main.py ctf
         ;;
     clean)
         echo "Executing command for 'clean'"

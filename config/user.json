@@ -8,5 +8,9 @@
         "kaslr" : false,
         "cores" : 1,
         "threads" : 1
+    },
+    "ctf" : {
+        "use-ctf-vmlinux" : true,
+        "vmlinux-path" : "TODO"
     }
 }
