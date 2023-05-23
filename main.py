@@ -11,8 +11,8 @@ import autokd.utils.printer as printer
 def run():
     checker.proxy()
     kbuilder.download().unpack().compile()
-    initrd.unpack().pack()
-    krunner.make_run_script().compile_exp().run()
+    initrd.unpack().compile_exp().pack()
+    krunner.make_run_script().run()
     # kbuilder.unpack()
     # kbuilder.()
 
@@ -20,8 +20,8 @@ def ctf():
     if not config.ctfopts.enabled:
         printer.fatal("only enable ctf option in user.json can use ctf mode")
         
-    initrd.unpack().pack()
-    krunner.make_run_script().compile_exp().run()
+    initrd.unpack().compile_exp().pack()
+    krunner.make_run_script().run()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

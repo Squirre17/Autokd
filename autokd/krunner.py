@@ -98,25 +98,6 @@ class Krunner:
         os.chmod(config.qemu_script_path, 0o755)
 
         return self
-
-    def compile_exp(self) -> Type["Krunner"]:
-
-        assert config.exp_src_path.exists()
-
-        exp_output_path = config.unpacked_fs_dir_path / "exp"
-        cmd = "gcc -g -o {out} {src} --static -lpthread".format(
-            out = exp_output_path.absolute(),
-            src = config.exp_src_path.absolute()
-        ) # TODO: maybe provide by user?
-
-        printer.info("conpiling the exp...")
-        result = sp.run(cmd, shell=True) # TODO: configuable for capture output , capture_output=True)
-        if result.returncode != 0:
-            printer.fatal(f"compile failed with result {result}")
-
-        # TODO: symbol recover
-        return self
-
         
     def run(self) -> None:
 
