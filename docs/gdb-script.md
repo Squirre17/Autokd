@@ -1,0 +1,6 @@
+templete
+
+```shell
+gef-remote --qemu-user --qemu-binary tmp/vmlinux localhost 1234
+
+```
