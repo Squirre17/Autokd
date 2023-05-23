@@ -147,23 +147,23 @@ typedef int64_t  i64;
   } while (0)
 
 /* powerful assert equal */
-#define assert_eq(varl, varr) do {                             \
-    if(varl != varr) {                                         \
-        SAY(cREDp "\n[-] Assert failed :" cRST " %p == %p\n"   \
-            ,varl, varr                                        \
-        );                                                     \
-        assert(varl == varr);                                  \
-    }                                                          \
+#define assert_eq(varl, varr) do {                               \
+    if(varl != varr) {                                           \
+        SAY(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
+            ,(u64)varl, (u64)varr                                \
+        );                                                       \
+        assert(varl == varr);                                    \
+    }                                                            \
   } while (0)
 
 /* powerful assert not equal */
-#define assert_neq(varl, varr) do {                            \
-    if(varl == varr) {                                         \
-        SAY(cREDp "\n[-] Assert failed :" cRST " %p != %p\n"   \
-            ,varl, varr                                        \
-        );                                                     \
-        assert(varl != varr);                                  \
-    }                                                          \
+#define assert_neq(varl, varr) do {                              \
+    if(varl == varr) {                                           \
+        SAY(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
+            ,(u64)varl, (u64)varr                                \
+        );                                                       \
+        assert(varl != varr);                                    \
+    }                                                            \
   } while (0)
 
 

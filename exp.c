@@ -1,6 +1,6 @@
-#include <stdio.h>
+#include "inc/common.h"
 int main(int argc, char const *argv[])
 {
-    puts("Hello Autokd");
+    OK("Hello Autokd");
     return 0;
 }
