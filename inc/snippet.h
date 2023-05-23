@@ -55,6 +55,7 @@ static void restore_state() {
              u_rsp
              u_ss
     */
+    assert_neq(_sp, 0);
     asm volatile(
         ".intel_syntax noprefix;"
         "swapgs;"
