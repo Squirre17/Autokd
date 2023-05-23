@@ -1,3 +1,6 @@
+#ifndef __SNIPPET_H__
+#define __SNIPPET_H__
+
 #include "inc/common.h"
 
 int devfd = -1;
@@ -83,3 +86,4 @@ void get_root(u64 pkc, u64 cc) {
     (* (int * (*)(void *))cc)((* (void *(*)(void *))pkc)(NULL));
     restore_state();
 }
+#endif /* __SNIPPET_H__ */
