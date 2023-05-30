@@ -6,14 +6,14 @@
 int devfd = -1;
 
 void write_to_dev(char *buf, i32 sz) {
-    act("write %x byte to dev from buf %p", sz, (void *)buf);
+    act("write 0x%x byte to dev from buf %p", sz, (void *)buf);
     int r = write(devfd, buf, sz);
     if(r != sz)
         panic("write");
 }
 
 void read_from_dev(char *buf, i32 sz) {
-    act("read %x byte from dev to buf %p", sz, (void *)buf);
+    act("read 0x%x byte from dev to buf %p", sz, (void *)buf);
     int r = read(devfd, buf, sz);
     if(r != sz)
         panic("read");
