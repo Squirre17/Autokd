@@ -51,6 +51,11 @@ class CtfConfig:
         if self.use_custom_qemu_script:
             printer.note("use custom qemu script")
 
+class GccConfig:
+    def __init__(self, conf) -> None:
+        self.compile_option     : bool = conf["gcc"]["compile-option"]
+        self.lib_dep            : bool = conf["gcc"]["lib-dep"]
+
     
 class Config:
     '''
@@ -114,6 +119,9 @@ class Config:
         # ctf
         self.ctfopts                 : CtfConfig = None 
 
+        # gcc
+        self.gccopts                 : GccConfig = None 
+
     def parse(self) -> None:
         try:
             with open(self.SYS_CONF) as sysf:
@@ -135,6 +143,7 @@ class Config:
                 self.qemuopts                   = QemuConfig(conf)
                 self.msicopts                   = MsicConfig(conf)
                 self.ctfopts                    = CtfConfig(conf)
+                self.gccopts                    = GccConfig(conf)
         except Exception:
             raise Exception
 

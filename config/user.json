@@ -18,5 +18,9 @@
     },
     "gdb" : {
         "gef-path" : "TODO"
+    },
+    "gcc" : {
+        "compile-option" : "",
+        "lib-dep" : ""
     }
 }

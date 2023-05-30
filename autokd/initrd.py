@@ -88,9 +88,11 @@ class Initrd:
         assert config.exp_src_path.exists()
 
         exp_output_path = config.unpacked_fs_dir_path / "exp"
-        cmd = "gcc -g -o {out} {src} -no-pie --static -lpthread".format(
+        cmd = "gcc -g -o {out} {src} -no-pie --static {com_opt} -lpthread {lib_dep}".format(
             out = exp_output_path.absolute(),
-            src = config.exp_src_path.absolute()
+            src = config.exp_src_path.absolute(),
+            com_opt = config.gccopts.compile_option,
+            lib_dep = config.gccopts.lib_dep
         ) # TODO: maybe provide by user?
 
         printer.info("conpiling the exp...")

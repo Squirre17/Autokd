@@ -56,3 +56,11 @@ scripts
 $ py scripts/string-search-in-kernel.py /sbin/modprobe
 0xffffffff8225d2e0
 ```
+
+gcc options
+```json
+    "gcc" : {
+        "compile-option" : "-D_FILE_OFFSET_BITS=64",
+        "lib-dep" : "-lfuse"
+    }
+```
