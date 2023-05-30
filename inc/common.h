@@ -1,5 +1,6 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
+
 #include <stdint.h>
 
 typedef uint8_t  u8;
@@ -54,102 +55,102 @@ typedef int64_t  i64;
 
 /* wrap of printf */
 
-#define SAY(x...)     printf(x) 
-#define SAYL(x...)    { printf(x); puts(""); }
+#define say(x...)     printf(x) 
+#define sayl(x...)    { printf(x); puts(""); }
 
 /* Show a prefixed warning. */
 
-#define WARN(x...) do {                        \
-    SAY(cORA "[!] " cWHIp "WARNING: " cRST x); \
-    SAY(cRST "\n");                            \
+#define warn(x...) do {                        \
+    say(cORA "[!] " cWHIp "WARNING: " cRST x); \
+    say(cRST "\n");                            \
   } while (0)
 
 /* Show a prefixed "doing something" message. */
 
-#define ACT(x...) do {                        \
-    SAY(cBLU "[*] " cRST x);                  \
-    SAY(cRST "\n");                           \
+#define act(x...) do {                        \
+    say(cBLU "[*] " cRST x);                  \
+    say(cRST "\n");                           \
   } while (0)
 
 /* Show a prefixed "success" message. */
 
-#define OK(x...) do {                         \
-    SAY(cGRE "[+] " cRST x);                  \
-    SAY(cRST "\n");                           \
+#define ok(x...) do {                         \
+    say(cGRE "[+] " cRST x);                  \
+    say(cRST "\n");                           \
   } while (0)
 
 /* Show a prefixed "debug" message. */
 
-#define DBG(x...) do {                        \
-    SAY(cPUR "[x] " cRST);                    \
-    SAY("%s(), %s:%u : ",                     \
+#define dbg(x...) do {                        \
+    say(cPUR "[x] " cRST);                    \
+    say("%s(), %s:%u : ",                     \
         __FUNCTION__, __FILE__, __LINE__ );   \
-    SAYL(x);                                  \
+    sayl(x);                                  \
   } while (0)
 
 /* Show a prefixed fatal error message . */
 
-#define ERR(x...) do {                        \
-    SAY(cRED "\n[-] " cRST);                  \
-    SAY("%s(), %s:%u : ",                     \
+#define err(x...) do {                        \
+    say(cRED "\n[-] " cRST);                  \
+    say("%s(), %s:%u : ",                     \
         __FUNCTION__, __FILE__, __LINE__ );   \
-    SAYL(x);                                  \
+    sayl(x);                                  \
   } while (0)
 /* Die with a verbose non-OS fatal error message. */
 
-#define FATAL(x...) do { \
-    SAY(cRED "\n[-] PROGRAM ABORT : " cWHI x);                \
-    SAY(cRED "\n         Location : " cRST "%s(), %s:%u\n\n", \
+#define fatal(x...) do { \
+    say(cRED "\n[-] PROGRAM abort : " cWHI x);                \
+    say(cRED "\n         Location : " cRST "%s(), %s:%u\n\n", \
          __FUNCTION__, __FILE__, __LINE__);                   \
     exit(1); \
   } while (0)
 
 /* Die by calling abort() to provide a core dump. */
 
-#define ABORT(x...) do { \
-    SAY(cREDp "\n[-] PROGRAM ABORT : " cWHI x);                \
-    SAY(cREDp "\n    Stop location : " cRST "%s(), %s:%u\n\n", \
+#define abort(x...) do { \
+    say(cREDp "\n[-] PROGRAM abort : " cWHI x);                \
+    say(cREDp "\n    Stop location : " cRST "%s(), %s:%u\n\n", \
          __FUNCTION__, __FILE__, __LINE__);                    \
     abort(); \
   } while (0)
 
 /* Die with a verbose OS fatal error message. */
 
-#define PANIC(x...) do {                                            \
+#define panic(x...) do {                                            \
     fflush(stdout);                                                 \
-    SAY(cREDp "\n[-]  SYSTEM ERROR : " cWHI x);                     \
-    SAY(cREDp "\n    Stop location : " cRST "%s(), %s:%u\n",        \
+    say(cREDp "\n[-]  SYSTEM ERROR : " cWHI x);                     \
+    say(cREDp "\n    Stop location : " cRST "%s(), %s:%u\n",        \
          __FUNCTION__, __FILE__, __LINE__);                         \
-    SAY(cREDp "       OS message : " cRST "%s\n", strerror(errno)); \
+    say(cREDp "       OS message : " cRST "%s\n", strerror(errno)); \
     exit(1);                                                        \
   } while (0)
 
 /* Die with FAULT() or PFAULT() depending on the value of res (used to
    interpret different failure modes for read(), write(), etc). */
 
-#define RPFATAL(res, x...) do {           \
-    if (res < 0) PANIC(x); else FATAL(x); \
+#define rpfatal(res, x...) do {           \
+    if (res < 0) panic(x); else fatal(x); \
   } while (0)
 
-/* Error-checking versions of read() and write() that call RPFATAL() as
+/* Error-checking versions of read() and write() that call rpfatal() as
    appropriate. */
 
 #define ck_write(fd, buf, len, fname) do {                       \
     u32 _len = (len);                                            \
     i32 _res = write(fd, buf, _len);                             \
-    if (_res != _len) RPFATAL(_res, "Short write to %s", fname); \
+    if (_res != _len) rpfatal(_res, "Short write to %s", fname); \
   } while (0)
 
 #define ck_read(fd, buf, len, fname) do {                         \
     u32 _len = (len);                                             \
     i32 _res = read(fd, buf, _len);                               \
-    if (_res != _len) RPFATAL(_res, "Short read from %s", fname); \
+    if (_res != _len) rpfatal(_res, "Short read from %s", fname); \
   } while (0)
 
 /* powerful assert equal */
 #define assert_eq(varl, varr) do {                               \
     if(varl != varr) {                                           \
-        SAY(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
+        say(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
             ,(u64)varl, (u64)varr                                \
         );                                                       \
         assert(varl == varr);                                    \
@@ -159,7 +160,7 @@ typedef int64_t  i64;
 /* powerful assert not equal */
 #define assert_neq(varl, varr) do {                              \
     if(varl == varr) {                                           \
-        SAY(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
+        say(cREDp "\n[-] Assert failed :" cRST " %lx == %lx\n"   \
             ,(u64)varl, (u64)varr                                \
         );                                                       \
         assert(varl != varr);                                    \
@@ -168,13 +169,13 @@ typedef int64_t  i64;
 
 
 #define unimplemented() do {                                     \
-    SAYL(cREDp "\n[-] Unimplamented part : " cRST "%s(), %s:%u", \
+    sayl(cREDp "\n[-] Unimplamented part : " cRST "%s(), %s:%u", \
             __FUNCTION__, __FILE__, __LINE__);                   \
     exit(1);                                                     \
   } while(0);
 
 #define unreachable() do {                                         \
-    SAYL(cREDp "\n[-] Unreachable location : " cRST "%s(), %s:%u", \
+    sayl(cREDp "\n[-] Unreachable location : " cRST "%s(), %s:%u", \
             __FUNCTION__, __FILE__, __LINE__);                     \
     exit(1);                                                       \
   } while(0);

