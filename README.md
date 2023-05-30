@@ -50,3 +50,9 @@ chmod +x ./akd
 # or skip confirmation
 ./akd ctf skip
 ```
+
+scripts
+```shell
+$ py scripts/string-search-in-kernel.py /sbin/modprobe
+0xffffffff8225d2e0
+```
