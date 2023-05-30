@@ -45,4 +45,8 @@ fill any thing in `config/user.json`
 ```shell
 chmod +x ./akd
 ./akd run
+# or
+./akd ctf
+# or skip confirmation
+./akd ctf skip
 ```

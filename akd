@@ -13,8 +13,8 @@ ERR="${RED}[!]${DFT}"
 NOTE="${BLUE}[*]${DFT}"
 INFO="${GREEN}[+]${DFT}"
 
-if [ $# -ne 1 ]; then
-    echo -e "${ERR} must provide a argument"
+if [ $# -le 1 ] || [ $# -gt 3 ]; then
+    echo -e "${ERR} Usage : ./akd <option> [extra]"
     exit 1
 fi
 
@@ -40,7 +40,7 @@ case "$1" in
         ;;
     ctf)
         echo -e "${INFO} run the ctf kernel"
-        python3 main.py ctf
+        python3 main.py $@
         ;;
     clean)
         echo "Executing command for 'clean'"

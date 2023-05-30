@@ -37,7 +37,7 @@ class QemuConfig:
 
 class MsicConfig:
     def __init__(self, conf) -> None:
-        self.need_confirm : bool = conf.get("confirmation-before-running", False)
+        self.need_confirm : bool = conf["confirmation-before-running"]
         
 class CtfConfig:
     def __init__(self, conf) -> None:

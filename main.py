@@ -25,10 +25,14 @@ def ctf():
 
 if __name__ == "__main__":
     
-    if len(sys.argv) != 2:
+    if len(sys.argv) > 3 or len(sys.argv) < 2:
         printer.fatal("Usage : python3 main.py <option>")
     
     opt = sys.argv[1]
+    if len(sys.argv) == 3:
+        if sys.argv[2] == "skip":
+            config.msicopts.need_confirm = False
+
     if opt == "run":
         run()
     elif opt == "ctf":
