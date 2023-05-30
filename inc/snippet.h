@@ -1,7 +1,7 @@
 #ifndef __SNIPPET_H__
 #define __SNIPPET_H__
 
-#include "inc/common.h"
+#include "common.h"
 
 int devfd = -1;
 

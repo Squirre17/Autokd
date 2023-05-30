@@ -5,7 +5,7 @@ qemu-system-x86_64  \
             -append "console=ttyS0 loglevel=3 oops=panic panic=-1 nokaslr pti"  \
             -no-reboot  \
             -cpu qemu64,+smep,+smap  \
-            -smp cores=2,threads=2  \
+            -smp cores=1,threads=1  \
             -nographic  \
             -net nic,model=virtio  \
             -net user  \
