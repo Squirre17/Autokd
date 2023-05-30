@@ -49,6 +49,7 @@
         "snippet.h": "c",
         "fcntl.h": "c",
         "syscall.h": "c",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "stat.h": "c"
     }
 }
