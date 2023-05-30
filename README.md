@@ -34,7 +34,7 @@ fill any thing in `config/user.json`
         "threads" : 1
     },
     "ctf" : {
-        "use-ctf-bzimage" : false,
+        "enable-ctf-mode" : false,
         "bzimage-path" : "/tmp/akd/kernel-challenge/knote/bzImage",
         "use-custom-qemu-script" : false
     }

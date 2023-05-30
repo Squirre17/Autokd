@@ -1,6 +1,6 @@
 qemu-system-x86_64  \
             -m 256M  \
-            -kernel /home/squ/proj/akd-dev/kernel-root/linux-5.10/arch/x86_64/boot/bzImage  \
+            -kernel kernel-root/linux-5.10/arch/x86_64/boot/bzImage  \
             -initrd /home/squ/proj/akd-dev/resource/initrd.modified.cpio  \
             -append "console=ttyS0 oops=panic panic=1 quiet nokaslr nopti"  \
             -no-reboot  \

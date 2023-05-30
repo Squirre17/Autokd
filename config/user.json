@@ -12,8 +12,8 @@
         "threads" : 1
     },
     "ctf" : {
-        "use-ctf-bzimage" : false,
-        "bzimage-path" : "/tmp/akd/kernel-challenge/knote/bzImage",
+        "enable-ctf-mode" : true,
+        "bzimage-path" : "./kernel-root/linux-5.10/arch/x86_64/boot/bzImage",
         "use-custom-qemu-script" : false
     },
     "gdb" : {

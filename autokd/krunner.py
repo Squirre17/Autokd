@@ -17,17 +17,25 @@ from loguru              import (logger)
 from autokd.utils.dynbar import (Dynbar)
 from autokd.config       import (config)
 
+def path_must_exist(p : Path):
+    if not p.exists():
+        printer.fatal(
+            "{} not found, abort".format(p.absolute())
+        )
+
 class Krunner:
 
     def __init__(self) -> None:
-        config.qemu_script_path = config.scripts_dir_path / "qemu-run.sh"
-        config.exp_src_path     = Path.cwd() / "exp.c"
-        if not config.exp_src_path.exists():
-            printer.fatal("{} not found, abort".format(config.exp_src_path.absolute()))
+
+        path_must_exist(config.qemu_script_path)
+        path_must_exist(config.exp_src_path)
+
+        
+        self.cmd = None
         
 
     def make_run_script(self) -> Type["Krunner"]:
-        '''shell
+        '''example
         qemu-system-x86_64 \
             -m 256M \
             -kernel ./bzImage \
@@ -44,8 +52,8 @@ class Krunner:
             -s
         '''
 
-        assert config.bziamge_path.exists()
-        assert config.modified_initrd_path.exists()
+        path_must_exist(config.bziamge_path)
+        path_must_exist(config.modified_initrd_path)
 
         # generate cpu_protect str
         cpu_protect = ""
@@ -66,7 +74,7 @@ class Krunner:
         kpti  = "pti" if config.qemuopts.kpti else "nopti"
 
         # temp
-        cmd = '''qemu-system-x86_64
+        self.cmd = '''qemu-system-x86_64
             -m 256M
             -kernel {bzimage_path}
             -initrd {modified_initrd_path}
@@ -92,17 +100,20 @@ class Krunner:
         #     printer.warn("TEMP : not change if exist")
         #     return self
 
-        with open(config.qemu_script_path,  "+w") as f:
-            f.write("  \\\n".join(cmd.splitlines()))
-
-        os.chmod(config.qemu_script_path, 0o755)
+        # wait late write to qemu script when qemu-custom is true
 
         return self
         
     def run(self) -> None:
 
-        assert config.qemu_script_path.exists()
+        path_must_exist(config.qemu_script_path)
         "todo : maybe this part let user to do more batter"
+
+        if not config.ctfopts.use_custom_qemu_script:# only writeback when not custom qemu script enabled        
+            with open(config.qemu_script_path,  "+w") as f:
+                f.write("  \\\n".join(self.cmd.splitlines()))
+
+            os.chmod(config.qemu_script_path, 0o755)
         
         if config.msicopts.need_confirm:
             printer.note("run qemu now [Y/n] ", not_line_break=True)# tmp
@@ -110,7 +121,6 @@ class Krunner:
             if opt == "n":
                 printer.fatal("exit")
             
-        
         assert os.access(config.qemu_script_path, os.X_OK)
         sp.run([config.qemu_script_path.absolute()], shell=True)
 

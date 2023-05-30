@@ -18,6 +18,12 @@ def return_no_none(f : Callable) -> Callable:
         return ret
     return wrapper
 
+def path_must_exist(p : Path): # temp
+    if not p.exists():
+        printer.fatal(
+            "{} not found, abort".format(p.absolute())
+        )
+
 class QemuConfig:
     def __init__(self, conf) -> None:
         self.smep     : bool = conf.get("smep", False)
@@ -35,11 +41,11 @@ class MsicConfig:
         
 class CtfConfig:
     def __init__(self, conf) -> None:
-        self.enabled : bool = conf["ctf"]["use-ctf-bzimage"]
-        if self.enabled:
-            printer.note("use ctf provided bzimage")
-            self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
-            assert self.bzimage_path.exists()
+        self.enabled : bool = conf["ctf"]["enable-ctf-mode"]
+        # enable ctf mode will default to use provided bzimage path
+        printer.note("use ctf provided bzimage")
+        self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
+        path_must_exist(self.bzimage_path)
         
         self.use_custom_qemu_script : bool = conf["ctf"].get("use-custom-qemu-script", False)
         if self.use_custom_qemu_script:
@@ -94,10 +100,10 @@ class Config:
         create_if_not_exist(self.download_dir_path) 
 
         # qemu
-        self.__qemu_script_path      : Path = None
+        self.__qemu_script_path      : Path = self.scripts_dir_path / "qemu-run.sh"
         
         # exp
-        self.exp_src_path            : Path = None
+        self.exp_src_path            : Path = cwd /  "./exp.c"
 
         # qemu options
         self.qemuopts                : QemuConfig = None

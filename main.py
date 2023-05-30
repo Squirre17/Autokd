@@ -24,6 +24,7 @@ def ctf():
     krunner.make_run_script().run()
 
 if __name__ == "__main__":
+    
     if len(sys.argv) != 2:
         printer.fatal("Usage : python3 main.py <option>")
     
