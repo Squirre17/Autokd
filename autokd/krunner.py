@@ -73,19 +73,20 @@ class Krunner:
         #generate pti str
         kpti  = "pti" if config.qemuopts.kpti else "nopti"
 
+        # TODO: -monitor /dev/null
+
         # temp
         self.cmd = '''qemu-system-x86_64
-            -m 256M
+            -m 128M
             -kernel {bzimage_path}
             -initrd {modified_initrd_path}
-            -append "console=ttyS0 oops=panic panic=1 quiet {kaslr} {kpti}"
+            -append "console=ttyS0 loglevel=3 oops=panic panic=-1 {kaslr} {kpti}"
             -no-reboot
             -cpu qemu64{cpu_protect}
             -smp {ct_num}
             -nographic
             -net nic,model=virtio
             -net user
-            -monitor /dev/null
             -s'''.format(
                 bzimage_path          = config.bziamge_path,
                 modified_initrd_path  = config.modified_initrd_path,

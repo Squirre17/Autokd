@@ -1,8 +1,8 @@
 qemu-system-x86_64  \
-            -m 256M  \
+            -m 128M  \
             -kernel kernel-root/linux-5.10/arch/x86_64/boot/bzImage  \
             -initrd /home/squ/proj/akd-dev/resource/initrd.modified.cpio  \
-            -append "console=ttyS0 oops=panic panic=1 quiet nokaslr nopti"  \
+            -append "console=ttyS0 loglevel=3 oops=panic panic=-1 nokaslr nopti"  \
             -no-reboot  \
             -cpu qemu64  \
             -smp cores=1,threads=1  \
