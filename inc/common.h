@@ -179,4 +179,13 @@ typedef int64_t  i64;
             __FUNCTION__, __FILE__, __LINE__);                     \
     exit(1);                                                       \
   } while(0);
+
+#define range2(__v, __n, __m, __blk) ({    \
+    for(int __v = __n; __v < __m; __v++) { \
+        {__blk}                            \
+    }                                      \
+})
+
+#define range(__v, __m, __blk) range2(__v, 0, __m, __blk)
+
 #endif
