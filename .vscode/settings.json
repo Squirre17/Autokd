@@ -47,6 +47,7 @@
         "fstream": "cpp",
         "*.tcc": "cpp",
         "snippet.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "syscall.h": "c"
     }
 }
