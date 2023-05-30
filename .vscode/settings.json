@@ -46,6 +46,7 @@
         "xutility": "cpp",
         "fstream": "cpp",
         "*.tcc": "cpp",
-        "snippet.h": "c"
+        "snippet.h": "c",
+        "fcntl.h": "c"
     }
 }
