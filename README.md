@@ -64,3 +64,10 @@ gcc options
         "lib-dep" : "-lfuse"
     }
 ```
+
+highlight address 
+```c
+```c
+ok("Hello Autokd" cRED " 0x%lx" cRST, (u64)main);
+```
+```
