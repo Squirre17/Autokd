@@ -3,11 +3,11 @@
     "initrd-is-root-used" : false,
     "confirmation-before-running" : true,
     "nproc" : 2,
-    "qemu-option" : {
-        "semp" : false,
-        "samp" : false,
+    "qemu-options" : {
+        "smep" : true,
+        "smap" : true,
         "kaslr" : false,
-        "kpti" : false,
+        "kpti" : true,
         "cores" : 1,
         "threads" : 1
     },

@@ -26,12 +26,12 @@ def path_must_exist(p : Path): # temp
 
 class QemuConfig:
     def __init__(self, conf) -> None:
-        self.smep     : bool = conf.get("smep", False)
-        self.smap     : bool = conf.get("smap", False)
-        self.kaslr    : bool = conf.get("kaslr", False)
-        self.kpti     : bool = conf.get("kpti", False)
-        self.cores    : int  = conf.get("cores", 1)
-        self.threads  : int  = conf.get("threads", 1)
+        self.smep     : bool = conf["qemu-options"]["smep"]
+        self.smap     : bool = conf["qemu-options"]["smap"]
+        self.kaslr    : bool = conf["qemu-options"]["kaslr"]
+        self.kpti     : bool = conf["qemu-options"]["kpti"]
+        self.cores    : int  = conf["qemu-options"]["cores"]
+        self.threads  : int  = conf["qemu-options"]["threads"]
 
         pass
 

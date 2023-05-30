@@ -2,12 +2,11 @@ qemu-system-x86_64  \
             -m 128M  \
             -kernel kernel-root/linux-5.10/arch/x86_64/boot/bzImage  \
             -initrd /home/squ/proj/akd-dev/resource/initrd.modified.cpio  \
-            -append "console=ttyS0 loglevel=3 oops=panic panic=-1 nokaslr nopti"  \
+            -append "console=ttyS0 loglevel=3 oops=panic panic=-1 nokaslr pti"  \
             -no-reboot  \
-            -cpu qemu64  \
-            -smp cores=1,threads=1  \
+            -cpu qemu64,+smep,+smap  \
+            -smp cores=2,threads=2  \
             -nographic  \
             -net nic,model=virtio  \
             -net user  \
-            -monitor /dev/null  \
             -s
