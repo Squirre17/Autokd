@@ -72,6 +72,10 @@ class Initrd:
         if config.modified_initrd_path.exists():
             printer.note("initrd is unpacked already, skip this stage")
             return self
+        else:
+            if config.unpacked_fs_dir_path.exists():
+                printer.note("initrd.modefied.cpio not exist, remove unpacked fs-root previously")
+                shutil.rmtree(config.unpacked_fs_dir_path)
 
         if not config.unpacked_fs_dir_path.exists():
             config.unpacked_fs_dir_path.mkdir()
