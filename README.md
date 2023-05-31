@@ -1,4 +1,4 @@
-automate kernel deploy
+automate kernel exploit environment deploy
 
 # procedure
 
