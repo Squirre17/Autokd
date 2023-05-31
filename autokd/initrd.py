@@ -27,7 +27,7 @@ class Initrd:
         if not config.resource_dir_path.exists():
             config.resource_dir_path.mkdir()
 
-        config.modified_initrd_path = config.resource_dir_path /  "initrd.modified.cpio";
+        config.modified_initrd_path = config.temp_dir_path /  "initrd.modified.cpio";
         config.initrd_path          = config.resource_dir_path /  "initrd.cpio";
 
         if config.initrd_is_root_used:

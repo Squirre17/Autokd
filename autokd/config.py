@@ -97,12 +97,14 @@ class Config:
         self.unpacked_fs_dir_path    : Path = cwd / "fs-root"
         self.kernel_preroot_dir_path : Path = cwd / "kernel-root" # not real root
         self.download_dir_path       : Path = cwd / "download"
+        self.temp_dir_path           : Path = cwd / "tmp"
 
         create_if_not_exist(self.resource_dir_path)
         create_if_not_exist(self.scripts_dir_path)
         create_if_not_exist(self.unpacked_fs_dir_path)
         create_if_not_exist(self.kernel_preroot_dir_path)
         create_if_not_exist(self.download_dir_path) 
+        create_if_not_exist(self.temp_dir_path) 
 
         # qemu
         self.__qemu_script_path      : Path = cwd / "qemu-run.sh"

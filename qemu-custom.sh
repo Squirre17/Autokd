@@ -1,7 +1,7 @@
 qemu-system-x86_64  \
             -m 256M  \
             -kernel /tmp/akd/kernel-challenge/knote/bzImage  \
-            -initrd /home/squ/proj/AKD/resource/initrd.modified.cpio  \
+            -initrd /home/squ/proj/AKD/tmp/initrd.modified.cpio  \
             -append "console=ttyS0 oops=panic panic=1 quiet nokaslr nopti"  \
             -no-reboot  \
             -cpu qemu64  \

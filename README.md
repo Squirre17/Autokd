@@ -15,7 +15,7 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 - musl support
 
 # Tips
-- If want unpack cpio again. just remove the `resource/initrd.modified.cpio` which will delete all fs-root automatically.
+- If want unpack cpio again. just remove the `tmp/initrd.modified.cpio` which will delete all fs-root automatically.
 - bzImage for qemu launch, vmlinux for gdb debug
 - `use-custom-qemu-script` option allow user to use costom script(e.g. ctf provided) to launch qemu, which location is fixed at `./qemu-custom.sh`
 fill any thing in `config/user.json`

@@ -7,3 +7,5 @@ fsroot
 fs-root
 resource/initrd.modified.cpio
 tmp
+tmp/initrd.modified.cpio
+qemu-run.sh
