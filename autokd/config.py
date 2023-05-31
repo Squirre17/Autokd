@@ -47,7 +47,7 @@ class CtfConfig:
         self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
         path_must_exist(self.bzimage_path)
         
-        self.use_custom_qemu_script : bool = conf["ctf"].get("use-custom-qemu-script", False)
+        self.use_custom_qemu_script : bool = conf["ctf"]["use-custom-qemu-script"]
         if self.use_custom_qemu_script:
             printer.note("use custom qemu script")
 
@@ -105,7 +105,7 @@ class Config:
         create_if_not_exist(self.download_dir_path) 
 
         # qemu
-        self.__qemu_script_path      : Path = self.scripts_dir_path / "qemu-run.sh"
+        self.__qemu_script_path      : Path = cwd / "qemu-run.sh"
         
         # exp
         self.exp_src_path            : Path = cwd /  "./exp.c"

@@ -27,7 +27,7 @@ class Krunner:
 
     def __init__(self) -> None:
 
-        path_must_exist(config.qemu_script_path)
+        assert config.qemu_script_path is not None
         path_must_exist(config.exp_src_path)
 
         
@@ -107,7 +107,7 @@ class Krunner:
         
     def run(self) -> None:
 
-        path_must_exist(config.qemu_script_path)
+        assert config.qemu_script_path is not None
         "todo : maybe this part let user to do more batter"
 
         if not config.ctfopts.use_custom_qemu_script:# only writeback when not custom qemu script enabled        
