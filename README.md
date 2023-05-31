@@ -11,7 +11,7 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 
 # TODO
 ## compile
-- gcc argument configurable
+- ~~gcc argument configurable~~
 - musl support
 
 # Tips
