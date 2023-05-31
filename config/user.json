@@ -1,6 +1,6 @@
 {
     "kernel-version" : "5.10",
-    "initrd-is-root-used" : false,
+    "initrd-is-root-used" : true,
     "confirmation-before-running" : true,
     "nproc" : 2,
     "qemu-options" : {

@@ -15,31 +15,39 @@ idea from ref here : https://eternalsakura13.com/2020/07/11/kernel_qemu/#more
 - musl support
 
 # Tips
-- If want unpack cpio again. just remove the `resource/initrd.modified.cpio`
+- If want unpack cpio again. just remove the `resource/initrd.modified.cpio` which will delete all fs-root automatically.
 - bzImage for qemu launch, vmlinux for gdb debug
 - `use-custom-qemu-script` option allow user to use costom script(e.g. ctf provided) to launch qemu, which location is fixed at `./qemu-custom.sh`
 fill any thing in `config/user.json`
 ```json
 {
     "kernel-version" : "5.10",
-    "initrd-is-root-used" : false,
+    "initrd-is-root-used" : true,
     "confirmation-before-running" : true,
     "nproc" : 2,
-    "qemu-option" : {
-        "semp" : false,
-        "samp" : false,
+    "qemu-options" : {
+        "smep" : true,
+        "smap" : true,
         "kaslr" : false,
-        "kpti" : false,
+        "kpti" : true,
         "cores" : 1,
         "threads" : 1
     },
     "ctf" : {
-        "enable-ctf-mode" : false,
-        "bzimage-path" : "/tmp/akd/kernel-challenge/knote/bzImage",
+        "enable-ctf-mode" : true,
+        "bzimage-path" : "./kernel-root/linux-5.10/arch/x86_64/boot/bzImage",
         "use-custom-qemu-script" : false
+    },
+    "gdb" : {
+        "gef-path" : "TODO"
+    },
+    "gcc" : {
+        "compile-option" : "",
+        "lib-dep" : ""
     }
 }
 ```
+
 
 # usage
 ```shell
@@ -67,7 +75,5 @@ gcc options
 
 highlight address 
 ```c
-```c
 ok("Hello Autokd" cRED " 0x%lx" cRST, (u64)main);
-```
 ```
