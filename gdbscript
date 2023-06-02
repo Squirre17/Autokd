@@ -1,5 +1,5 @@
 gef-remote --qemu-user --qemu-binary tmp/vmlinux localhost 1234
 add-symbol-file notebook.ko 0xffffffffc0000000
-so plugins/bp.py
+source plugins/bp.py
 bda set 0xffffffffc0000000
 bka set 0xffffffff81000000
