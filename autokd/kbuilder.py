@@ -81,7 +81,7 @@ class Kbuilder:
 
         # sanity check for skip unpack
         if config.kernel_preroot_dir_path.exists() and len([_ for _ in config.kernel_preroot_dir_path.iterdir()]) != 0:
-            printer.note("root dir exist, do not unpack again")
+            printer.note("root dir exist, do not unpack ksrc.tgz again")
             return self
         else:
             try:

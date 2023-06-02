@@ -30,7 +30,7 @@ class Initrd:
         config.modified_initrd_path = config.temp_dir_path /  "initrd.modified.cpio";
         config.initrd_path          = config.resource_dir_path /  "initrd.cpio";
 
-        if config.initrd_is_root_used:
+        if config.initrdopts.is_root_used:
             self.packcmd = "find . -print0 |" \
                            " cpio -o --null --format=newc --owner root > " \
                            "{}".format(config.modified_initrd_path.absolute())
@@ -91,13 +91,12 @@ class Initrd:
 
         assert config.exp_src_path.exists()
 
-        exp_output_path = config.unpacked_fs_dir_path / "exp"
         cmd = "gcc -g -o {out} {src} -no-pie --static {com_opt} -lpthread {lib_dep}".format(
-            out = exp_output_path.absolute(),
+            out = config.exp_out_path.absolute(),
             src = config.exp_src_path.absolute(),
             com_opt = config.gccopts.compile_option,
             lib_dep = config.gccopts.lib_dep
-        ) # TODO: maybe provide by user?
+        )
 
         printer.info("conpiling the exp...")
         result = sp.run(cmd, shell=True) # TODO: configuable for capture output , capture_output=True)

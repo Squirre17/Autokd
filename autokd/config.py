@@ -32,6 +32,7 @@ class QemuConfig:
         self.kpti     : bool = conf["qemu-options"]["kpti"]
         self.cores    : int  = conf["qemu-options"]["cores"]
         self.threads  : int  = conf["qemu-options"]["threads"]
+        self.mem      : int  = conf["qemu-options"]["mem"]
 
         pass
 
@@ -43,20 +44,33 @@ class CtfConfig:
     def __init__(self, conf) -> None:
         self.enabled : bool = conf["ctf"]["enable-ctf-mode"]
         # enable ctf mode will default to use provided bzimage path
-        printer.note("use ctf provided bzimage")
-        self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
-        path_must_exist(self.bzimage_path)
+        if self.enabled:
+            printer.note("use ctf provided bzimage")
+            self.bzimage_path = Path(conf["ctf"]["bzimage-path"])
+            path_must_exist(self.bzimage_path)
         
-        self.use_custom_qemu_script : bool = conf["ctf"]["use-custom-qemu-script"]
-        if self.use_custom_qemu_script:
-            printer.note("use custom qemu script")
 
 class GccConfig:
     def __init__(self, conf) -> None:
         self.compile_option     : bool = conf["gcc"]["compile-option"]
         self.lib_dep            : bool = conf["gcc"]["lib-dep"]
 
-    
+class InitrdConfig:
+
+    supported_formats = ("cpio")
+
+    def __init__(self, conf) -> None:
+        self.is_root_used        : bool = conf["initrd"]["is-root-used"]
+        self.format                     = conf["initrd"]["format"]
+        if self.format not in self.supported_formats:
+            printer.fatal(
+                "\"{}\" format not in support list [{}]".format(
+                    self.format,
+                    " ,".join(self.supported_formats)
+                )
+            )
+
+
 class Config:
     '''
     parse user/sys config file (current use .json).
@@ -83,10 +97,10 @@ class Config:
         self.unpacked_dir_name       : str  = None # e.g. linux-2.6.0
         self.kernel_root_dir         : Path = None #
         self.__bziamge_path          : Path = None
-        self.initrd_path             : Path = None
+        self.initrd_path             : Path = None # TODO: modify
         self.modified_initrd_path    : Path = None
-        self.initrd_is_root_used     : bool = False
         self.__vmlinux_path          : Path = None
+        self.use_custom_qemu_script  : bool = None
 
         # dir path TODO: reconstruct here
         def create_if_not_exist(p : Path) -> None:
@@ -128,6 +142,9 @@ class Config:
         # gcc
         self.gccopts                 : GccConfig = None 
 
+        # initrd
+        self.initrdopts              : InitrdConfig = None
+
     def parse(self) -> None:
         try:
             with open(self.SYS_CONF) as sysf:
@@ -144,14 +161,22 @@ class Config:
             with open(self.USER_CONF) as userf:
                 conf = json.load(userf)
                 self.nproc               : int  = conf["nproc"]
-                self.kernel_version      : str  = conf["kernel-version"] # e.g. v5.10-rc1                
-                self.initrd_is_root_used : bool = conf["initrd-is-root-used"] # TODO optimize here for empty key judge
+                self.kernel_version      : str  = conf["kernel-version"] # e.g. v5.10-rc1          
+
+                self.use_custom_qemu_script : bool = conf["use-custom-qemu-script"]
+                if self.use_custom_qemu_script:
+                    printer.note("use custom qemu script")      
+
                 self.qemuopts                   = QemuConfig(conf)
                 self.msicopts                   = MsicConfig(conf)
                 self.ctfopts                    = CtfConfig(conf)
                 self.gccopts                    = GccConfig(conf)
+                self.initrdopts                 = InitrdConfig(conf)
         except Exception:
             raise Exception
+    @property
+    def fsimg_path(self) -> Path:
+        return self.modified_initrd_path
 
     @property
     def bziamge_path(self) -> Path:
@@ -166,13 +191,15 @@ class Config:
 
     @property
     def qemu_script_path(self) -> Path:
-        if self.ctfopts.use_custom_qemu_script:
+        if self.use_custom_qemu_script:
             return Path.cwd() / "qemu-custom.sh"
         else:
             return self.__qemu_script_path
     
     @qemu_script_path.setter
     def qemu_script_path(self, path : Path) -> None:
+        if self.use_custom_qemu_script:
+            printer.fatal("shouldn't modift in ctf custom qemu script mode")
         self.__qemu_script_path = path
 
     @property
@@ -188,7 +215,14 @@ class Config:
         if self.ctfopts.enabled:
             printer.fatal("ctf mode don't allow you to modify this part")
         self.__vmlinux_path = path
-        
+    
+    @property
+    def exp_out_path(self) -> Path:
+        '''
+        abstract from supported fs
+        '''
+        return self.unpacked_fs_dir_path / "exp"
+
 config = Config()
 config.parse()
 

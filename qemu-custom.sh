@@ -1,13 +1,13 @@
-qemu-system-x86_64  \
-            -m 256M  \
-            -kernel /tmp/akd/kernel-challenge/knote/bzImage  \
-            -initrd /home/squ/proj/AKD/tmp/initrd.modified.cpio  \
-            -append "console=ttyS0 oops=panic panic=1 quiet nokaslr nopti"  \
-            -no-reboot  \
-            -cpu qemu64  \
-            -smp cores=1,threads=1  \
-            -nographic  \
-            -net nic,model=virtio  \
-            -net user  \
-            -monitor /dev/null  \
-            -s
+#!/bin/sh
+qemu-system-x86_64 \
+    -m 128M \
+    -kernel /home/squ/proj/akd-prac-use/tmp/release/bzImage \
+    -hda /home/squ/proj/akd-prac-use/tmp/release/rootfs.img \
+    -append "console=ttyS0 quiet root=/dev/sda rw init=/init oops=panic panic=1 panic_on_warn=1 nokaslr pti=on" \
+    -monitor /dev/null \
+    -smp cores=2,threads=2 \
+    -nographic \
+    -cpu kvm64,+smep,+smap \
+    -no-reboot \
+    -snapshot \
+    -s

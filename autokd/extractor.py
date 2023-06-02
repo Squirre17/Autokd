@@ -38,6 +38,7 @@ class Extractor:
                     config.vmlinux_path.absolute()
                 )
             )
+            return self
 
         if not os.access(config.script_extract_path, os.X_OK):
             printer.fatal(

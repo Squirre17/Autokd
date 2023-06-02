@@ -1,20 +1,24 @@
 {
     "kernel-version" : "5.10",
-    "initrd-is-root-used" : true,
     "confirmation-before-running" : true,
     "nproc" : 2,
+    "use-custom-qemu-script" : true,
+    "initrd" : {
+        "is-root-used" : true,
+        "format" : "cpio"
+    },
     "qemu-options" : {
         "smep" : true,
         "smap" : true,
         "kaslr" : false,
         "kpti" : true,
         "cores" : 1,
-        "threads" : 1
+        "threads" : 1,
+        "mem" : 256
     },
     "ctf" : {
         "enable-ctf-mode" : true,
-        "bzimage-path" : "./kernel-root/linux-5.10/arch/x86_64/boot/bzImage",
-        "use-custom-qemu-script" : false
+        "bzimage-path" : "/home/squ/proj/akd-prac-use/tmp/release/bzImage"
     },
     "gdb" : {
         "gef-path" : "TODO"

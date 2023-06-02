@@ -10,6 +10,9 @@ from autokd.config    import config
 import autokd.utils.printer as printer
 
 def run():
+    if config.ctfopts.enabled:
+        printer.fatal("ctf option is conflict with `./akd run`")
+        
     checker.proxy()
     kbuilder.download().unpack().compile()
     initrd.unpack().compile_exp().pack()

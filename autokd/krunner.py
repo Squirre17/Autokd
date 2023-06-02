@@ -53,7 +53,7 @@ class Krunner:
         '''
 
         path_must_exist(config.bziamge_path)
-        path_must_exist(config.modified_initrd_path)
+        path_must_exist(config.fsimg_path)
 
         # generate cpu_protect str
         cpu_protect = ""
@@ -77,9 +77,9 @@ class Krunner:
 
         # temp
         self.cmd = '''qemu-system-x86_64
-            -m 128M
+            -m {mem}M
             -kernel {bzimage_path}
-            -initrd {modified_initrd_path}
+            -initrd {fsimg_path}
             -append "console=ttyS0 loglevel=3 oops=panic panic=-1 {kaslr} {kpti}"
             -no-reboot
             -cpu qemu64{cpu_protect}
@@ -88,8 +88,9 @@ class Krunner:
             -net nic,model=virtio
             -net user
             -s'''.format(
+                mem                   = config.qemuopts.mem,
                 bzimage_path          = config.bziamge_path,
-                modified_initrd_path  = config.modified_initrd_path,
+                fsimg_path            = config.fsimg_path,
                 cpu_protect           = cpu_protect,
                 ct_num                = ct_num,
                 kaslr                 = kaslr,
@@ -110,7 +111,7 @@ class Krunner:
         assert config.qemu_script_path is not None
         "todo : maybe this part let user to do more batter"
 
-        if not config.ctfopts.use_custom_qemu_script:# only writeback when not custom qemu script enabled        
+        if not config.use_custom_qemu_script:# only writeback when not custom qemu script enabled        
             with open(config.qemu_script_path,  "+w") as f:
                 f.write("  \\\n".join(self.cmd.splitlines()))
 
