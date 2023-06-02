@@ -86,6 +86,7 @@ class Config:
         self.initrd_path             : Path = None
         self.modified_initrd_path    : Path = None
         self.initrd_is_root_used     : bool = False
+        self.__vmlinux_path          : Path = None
 
         # dir path TODO: reconstruct here
         def create_if_not_exist(p : Path) -> None:
@@ -111,6 +112,9 @@ class Config:
         
         # exp
         self.exp_src_path            : Path = cwd /  "./exp.c"
+
+        # scripts
+        self.script_extract_path     : Path = cwd / "scripts" / "extract.sh"
 
         # qemu options
         self.qemuopts                : QemuConfig = None
@@ -170,6 +174,20 @@ class Config:
     @qemu_script_path.setter
     def qemu_script_path(self, path : Path) -> None:
         self.__qemu_script_path = path
+
+    @property
+    def vmlinux_path(self) -> Path:
+        if self.ctfopts.enabled:
+            return Path.cwd() / "tmp" / "vmlinux"
+        else:
+            return self.__vmlinux_path
+        
+        
+    @vmlinux_path.setter
+    def vmlinux_path(self, path : Path) -> None:
+        if self.ctfopts.enabled:
+            printer.fatal("ctf mode don't allow you to modify this part")
+        self.__vmlinux_path = path
         
 config = Config()
 config.parse()

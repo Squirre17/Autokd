@@ -1,11 +1,12 @@
 import sys
 
-from autokd.initrd   import initrd
-from autokd.kdocker  import kdocker 
-from autokd.checker  import checker
-from autokd.kbuilder import kbuilder
-from autokd.krunner  import krunner
-from autokd.config   import config
+from autokd.extractor import extractor
+from autokd.kbuilder  import kbuilder
+from autokd.kdocker   import kdocker 
+from autokd.checker   import checker
+from autokd.krunner   import krunner
+from autokd.initrd    import initrd
+from autokd.config    import config
 import autokd.utils.printer as printer
 
 def run():
@@ -19,7 +20,7 @@ def run():
 def ctf():
     if not config.ctfopts.enabled:
         printer.fatal("only enable ctf option in user.json can use ctf mode")
-        
+    extractor.extract_vmlinux()
     initrd.unpack().compile_exp().pack()
     krunner.make_run_script().run()
 
