@@ -2,7 +2,6 @@
 qemu-system-x86_64 \
     -m 128M \
     -kernel /home/squ/proj/akd-prac-use/tmp/release/bzImage \
-    -hda /home/squ/proj/akd-prac-use/tmp/release/rootfs.img \
     -append "console=ttyS0 quiet root=/dev/sda rw init=/init oops=panic panic=1 panic_on_warn=1 nokaslr pti=on" \
     -monitor /dev/null \
     -smp cores=2,threads=2 \
@@ -11,3 +10,4 @@ qemu-system-x86_64 \
     -no-reboot \
     -snapshot \
     -s
+    # -hda /home/squ/proj/akd-prac-use/tmp/release/rootfs.img \

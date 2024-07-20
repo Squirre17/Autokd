@@ -86,7 +86,6 @@ class Krunner:
             -smp {ct_num}
             -nographic
             -net nic,model=virtio
-            -net user
             -s'''.format(
                 mem                   = config.qemuopts.mem,
                 bzimage_path          = config.bziamge_path,
@@ -96,6 +95,7 @@ class Krunner:
                 kaslr                 = kaslr,
                 kpti                  = kpti
         )
+        # TODO: -net user 
 
         # overhead is very low so dont need to 
         # if config.qemu_script_path.exists():

@@ -2,7 +2,7 @@ import sys
 
 from autokd.extractor import extractor
 from autokd.kbuilder  import kbuilder
-from autokd.kdocker   import kdocker 
+# from autokd.kdocker   import kdocker 
 from autokd.checker   import checker
 from autokd.krunner   import krunner
 from autokd.initrd    import initrd

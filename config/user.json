@@ -2,7 +2,7 @@
     "kernel-version" : "5.10",
     "confirmation-before-running" : true,
     "nproc" : 2,
-    "use-custom-qemu-script" : true,
+    "use-custom-qemu-script" : false,
     "initrd" : {
         "is-root-used" : true,
         "format" : "cpio"
@@ -18,7 +18,7 @@
     },
     "ctf" : {
         "enable-ctf-mode" : true,
-        "bzimage-path" : "/home/squ/proj/akd-prac-use/tmp/release/bzImage"
+        "bzimage-path" : "/home/squ/Prac/linux-kernel-compile-wksp/linux-5.10-rc1/arch/x86/boot/bzImage"
     },
     "gdb" : {
         "gef-path" : "TODO"
